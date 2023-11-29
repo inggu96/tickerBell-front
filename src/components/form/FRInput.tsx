@@ -9,9 +9,9 @@ const FRInput = forwardRef<HTMLInputElement, InputType>(
   ({ label, type, className, ...attr }, ref) => {
     return (
       <div>
-        <label htmlFor={attr.id} className={className}>
-          <input type={type} ref={ref} {...attr} />
+        <label htmlFor={attr.id}>
           <span>{label}</span>
+          <input className={className} type={type} ref={ref} {...attr} />
         </label>
       </div>
     );

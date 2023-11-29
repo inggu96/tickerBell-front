@@ -5,15 +5,17 @@ import { day, weekDay } from "@/util/day";
 import dayjs from "dayjs";
 import { KeyboardEvent, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
+import { Dropzone } from "./Dropzone";
 import FRInput from "./FRInput";
 
 import FRRadio from "./FRRadio";
 import { ImageUpload } from "./ImageUpload";
 import { InputField } from "./InputField";
 import { OnDatePicker } from "./OnDatePicker";
+import { fileWithPreview } from "./util";
 
 const Event = () => {
   const {
@@ -339,6 +341,30 @@ const Event = () => {
                 )}
               </div>
             </div>
+            <div className="flex flex-col">
+              <span>성인여부</span>
+              <div className="flex flex-row gap-12">
+                {["true", "false"].map((value) => {
+                  const selectedAdult = watch("isAdult");
+                  const borderClass =
+                    selectedAdult === value
+                      ? "border-blue-500"
+                      : "border-gray-200";
+
+                  return (
+                    <FRRadio
+                      key={value}
+                      {...register("isAdult", { required: true })}
+                      label={value}
+                      id={value}
+                      type="radio"
+                      value={value}
+                      className={borderClass}
+                    />
+                  );
+                })}
+              </div>
+            </div>
             <div className="flex flex-row">
               <label className="mr-4">성인여부</label>
               <div className="flex flex-row gap-12">
@@ -380,6 +406,7 @@ const Event = () => {
               />
               <FRInput
                 {...register("saleDegree", { required: true })}
+                className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                 label="할인 금액"
                 id="saleDegree"
               />
@@ -411,7 +438,25 @@ const Event = () => {
               setThumbNailUrl={setThumbNailUrl}
               setImageUrls={setImageUrls}
             />
-
+            <div>
+              <Controller
+                name="thumbnailUrl"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Dropzone
+                    onDrop={(files) => {
+                      onChange(files[0]);
+                    }}
+                    onDelete={(file) => {
+                      onChange(null);
+                      // console.log("onDelete", file);
+                    }}
+                    maxFiles={1}
+                    files={value ? [fileWithPreview(value)] : []}
+                  />
+                )}
+              />
+            </div>
             <Button
               className="mt-20 bg-blue-700 hover:bg-blue-800"
               type="submit"
