@@ -39,7 +39,7 @@ module.exports = {
         "3xl": "24px",
       },
       colors: {
-        primary: "#6366f1",
+        primary: "#fc4141",
         secondary: "#29303d",
         red: "#ff0000",
       },

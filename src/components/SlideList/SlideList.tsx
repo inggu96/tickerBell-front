@@ -5,6 +5,10 @@ import Slide from "../slide/Slide";
 import { eventSlideApi } from "@/api/events";
 import { useQuery } from "@tanstack/react-query";
 import cls from "classnames";
+import { PiEqualizerBold } from "react-icons/pi";
+import { LuMusic } from "react-icons/lu";
+import { CiMicrophoneOn } from "react-icons/ci";
+import { PiAlienBold } from "react-icons/pi";
 
 const SlideList = () => {
   const [tab, setTab] = useState("rankingMusicalEventList");
@@ -25,59 +29,71 @@ const SlideList = () => {
               <div
                 onClick={() => setTab("rankingMusicalEventList")}
                 className={cls(
-                  "inline-flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm",
+                  "flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm flex-col font-semibold shadow-xl w-80 ",
                   {
                     "bg-primary text-white": tab === "rankingMusicalEventList",
                   }
                 )}
               >
-                뮤지컬
+                <div className="flex justify-center text-3xl">
+                  <PiEqualizerBold />
+                </div>
+                <p className="text-lg text-center">뮤지컬</p>
               </div>
             )}
             {data?.data["rankingConcertEventList"] !== null && (
               <div
                 onClick={() => setTab("rankingConcertEventList")}
                 className={cls(
-                  "inline-flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm",
+                  "flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm flex-col font-semibold shadow-xl w-80 ",
                   {
                     "bg-primary text-white": tab === "rankingConcertEventList",
                   }
                 )}
               >
-                콘서트
+                <div className="flex justify-center text-3xl">
+                  <CiMicrophoneOn />
+                </div>
+                <p className="text-lg text-center">콘서트</p>
               </div>
             )}
             {data?.data["rankingPlayEventList"] !== null && (
               <div
                 onClick={() => setTab("rankingPlayEventList")}
                 className={cls(
-                  "inline-flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm",
+                  "flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm flex-col font-semibold shadow-xl w-80 ",
                   {
                     "bg-primary text-white": tab === "rankingPlayEventList",
                   }
                 )}
               >
-                여가
+                <div className="flex justify-center text-3xl">
+                  <PiAlienBold />
+                </div>
+                <p className="text-lg text-center">연극</p>
               </div>
             )}
             {data?.data["rankingClassicEventList"] !== null && (
               <div
                 onClick={() => setTab("rankingClassicEventList")}
                 className={cls(
-                  "inline-flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm",
+                  "flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm flex-col font-semibold shadow-xl w-80 ",
                   {
                     "bg-primary text-white": tab === "rankingClassicEventList",
                   }
                 )}
               >
-                클래식
+                <div className="flex justify-center text-3xl">
+                  <LuMusic />
+                </div>
+                <p className="text-lg text-center">클래식</p>
               </div>
             )}
             {data?.data["rankingSportsEventList"] !== null && (
               <div
                 onClick={() => setTab("rankingSportsEventList")}
                 className={cls(
-                  "inline-flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm",
+                  "flex px-12 py-4 border-1 rounded-full cursor-pointer text-sm flex-col font-semibold shadow-xl w-80 ",
                   {
                     "bg-primary text-white": tab === "rankingSportsEventList",
                   }

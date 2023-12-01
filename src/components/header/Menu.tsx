@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import Button from "../button/Button";
 
 const Menu = () => {
   const getRole = useRecoilValue(userSelector("role"));
@@ -33,19 +34,24 @@ const Menu = () => {
     }
   };
 
-  // console.log('로그인상태? : ', getIsLogin, getCookie("ticket-atk"))
-
   return (
     <div className="flex gap-6 text-[14px]">
       {isDev && <Link href="/modal">모달 임시</Link>}
-      {getRole === "ROLE_REGISTRANT" && (
+      {getIsLogin && getRole === "ROLE_REGISTRANT" && (
         <Link href="/event_regist">이벤트 등록</Link>
       )}
-      {/* {!atk && <Link href="/login">로그인</Link>} */}
-      <div onClick={auth} className="cursor-pointer">
-        {getIsLogin ? "로그아웃" : "로그인"}
+      {!getIsLogin && (
+        <div>
+          <Button className="text-black bg-white border w-100">
+            <Link href="/regist">회원가입</Link>
+          </Button>
+        </div>
+      )}
+      <div>
+        <Button className="font-bold w-100" onClick={auth}>
+          {getIsLogin ? "로그아웃" : "로그인"}
+        </Button>
       </div>
-      {!getIsLogin && <Link href="/regist">회원가입</Link>}
       {getIsLogin && (
         <Link href="/mypage/reserve" onClick={handleMyPageClick}>
           마이페이지

@@ -123,14 +123,17 @@ const LoginForm = () => {
               <small role="alert">{errors.password.message}</small>
             )}
           </div>
-          <div>
-            <Button className="bottom-0 mb-12 h-42" full type="submit">
-              로그인
-            </Button>
-            <Button className="text-black bg-white border h-42" full>
-              <Link href="/regist">회원가입</Link>
-            </Button>
-          </div>
+
+          <Button className="bottom-0 mb-12 h-42" full type="submit">
+            로그인
+          </Button>
+          <Button
+            className="text-black bg-white border h-42"
+            type="button"
+            full
+          >
+            <Link href="/regist">회원가입</Link>
+          </Button>
         </div>
       </form>
     </div>

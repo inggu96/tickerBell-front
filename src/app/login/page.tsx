@@ -28,9 +28,9 @@ const Index = () => {
   };
 
   return (
-    <div className="container flex flex-col w-screen h-screen bg-gray-200">
+    <div className="flex flex-col w-full h-screen bg-gray-200 ">
       <div className="flex justify-center w-full h-full my-auto mt-12 xl:gap-14 lg:justify-normal md:gap-5 ">
-        <div className="flex flex-col items-center justify-center w-1/2 gap-12 mx-auto bg-white rounded-lg shadow lg:w-1/3 lg:p-12">
+        <div className="flex flex-col items-center justify-center w-3/5 gap-12 p-12 mx-auto bg-white rounded-lg shadow lg:w-1/3 lg:p-12">
           <h3 className="mb-3 text-4xl font-extrabold text-dark-grey-900">
             티켓벨 로그인
           </h3>
@@ -48,11 +48,7 @@ const Index = () => {
             카카오 로그인
           </Button>
 
-          <p className="flex items-center mb-3">
-            <hr className="h-0 border-b border-solid border-grey-500 grow" />
-            <p className="mx-4 text-grey-600">or</p>
-            <hr className="h-0 border-b border-solid border-grey-500 grow" />
-          </p>
+          <p className="flex items-center mx-4 mb-3 text-grey-600">or</p>
           <LoginForm />
           <p className="text-sm leading-relaxed text-center text-grey-900">
             개인정보 보호를 위해 공용 PC에서 사용 후 <br />

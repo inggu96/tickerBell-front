@@ -12,9 +12,9 @@ const Header = () => {
       <div className="flex items-center justify-between w-full m-auto max-w-1280">
         <div className="flex items-center gap-20">
           <Link href="/">TickerBell</Link>
-          <SearchBar />
           <NavTab />
         </div>
+        <SearchBar />
         <Menu />
       </div>
     </header>
