@@ -9,16 +9,16 @@ import cls from "classnames";
 const SlideList = () => {
   const [tab, setTab] = useState("rankingMusicalEventList");
 
-  // const { data, isSuccess, isError, error } = useQuery({
-  //   queryKey: ["main-slide"],
-  //   queryFn: () => eventSlideApi(),
-  // });
+  const { data, isSuccess, isError, error } = useQuery({
+    queryKey: ["main-slide"],
+    queryFn: () => eventSlideApi(),
+  });
 
-  // console.log("data", data);
+  console.log("data", data);
 
   return (
     <>
-      {/* {!isError && isSuccess && (
+      {!isError && isSuccess && (
         <div className="mt-60">
           <div className="flex justify-center gap-8">
             {data?.data["rankingMusicalEventList"] !== null && (
@@ -92,7 +92,7 @@ const SlideList = () => {
           <Slide data={data?.data["deadLineEventList"]} title="마감임박" />
           <Slide data={data?.data["recommendEventList"]} title="추천!" />
         </div>
-      )} */}
+      )}
     </>
   );
 };

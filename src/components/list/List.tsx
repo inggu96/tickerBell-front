@@ -14,7 +14,7 @@ type ListType = {
   className?: string;
 };
 
-const List = ({ category, type, className }: ListType) => {
+export const List = ({ category, type, className }: ListType) => {
   const [ref, isView] = useInView();
   // 받은 카테고리가 있다면 카테고리. 없다면 전체
 
