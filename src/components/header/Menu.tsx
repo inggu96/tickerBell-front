@@ -42,11 +42,9 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex gap-6 text-[14px]">
+    <div className="flex items-center gap-6 text-[14px]">
       {isDev && <Link href="/modal">모달 임시</Link>}
-      {getIsLogin && getRole === "ROLE_REGISTRANT" && (
-        <Link href="/event_regist">이벤트 등록</Link>
-      )}
+
       {!getIsLogin && (
         <div className="gap-5">
           <Button className="text-black bg-white border w-100">
@@ -58,6 +56,7 @@ const Menu = () => {
           </Button>
         </div>
       )}
+
       {getIsLogin && (
         <div className="items-center hidden xl:flex">
           <div className="relative ml-6">
@@ -95,6 +94,11 @@ const Menu = () => {
             )}
           </div>
         </div>
+      )}
+      {getIsLogin && getRole === "ROLE_REGISTRANT" && (
+        <Button>
+          <Link href="/event_regist">이벤트 등록</Link>
+        </Button>
       )}
     </div>
   );
