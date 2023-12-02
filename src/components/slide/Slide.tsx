@@ -24,7 +24,7 @@ const Slide = ({
   autoplay = false,
   speed = 300,
   loop = true,
-  viewCount = 5
+  viewCount = 5,
 }: sliderProps) => {
   const settings = useMemo<Settings>(
     () => ({
@@ -50,19 +50,22 @@ const Slide = ({
             <Slider {...settings}>
               {data?.map((item: any, index: any) => (
                 <Link href={`/detail/${item.eventId}`} key={index}>
-                  {
-                    title === '랭킹' && <div>{index + 1}</div>
-                  }
-                  <div className="relative m-auto w-200 h-250 border border-1 border-[#eee]">
-                    <Image src={item.thumbNailUrl} alt={item.name} fill
-                      objectFit='contain' />
+                  {title === "랭킹" && (
+                    <div className="bottom-0 left-0 z-50 mb-2 ml-2 text-5xl font-bold text-red">
+                      {index + 1}
+                    </div>
+                  )}
+                  <div className="relative m-auto rounded-lg w-200 h-250">
+                    <Image
+                      src={item.thumbNailUrl}
+                      alt={item.name}
+                      fill
+                      objectFit="contain"
+                      className="rounded-lg "
+                    />
                   </div>
-                  <div>
-                    {item.name}
-                  </div>
-                  <div>
-                    {day(item.startEvent)}
-                  </div>
+                  <div>{item.name}</div>
+                  <div>{day(item.startEvent)}</div>
                 </Link>
               ))}
             </Slider>

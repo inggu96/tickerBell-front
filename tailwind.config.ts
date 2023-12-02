@@ -39,8 +39,8 @@ module.exports = {
         "3xl": "24px",
       },
       colors: {
-        primary: "#fc4141",
-        secondary: "#29303d",
+        primary: "#fe2325",
+        secondary: "#6366f1",
         red: "#ff0000",
       },
       saturate: {

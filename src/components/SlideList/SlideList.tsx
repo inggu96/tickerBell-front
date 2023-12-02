@@ -35,8 +35,14 @@ const SlideList = () => {
                   }
                 )}
               >
-                <div className="flex justify-center text-3xl">
-                  <PiEqualizerBold />
+                <div className="flex justify-center text-3xl text-primary ">
+                  <PiEqualizerBold
+                    className={
+                      tab === "rankingMusicalEventList"
+                        ? "text-white"
+                        : "text-primary"
+                    }
+                  />
                 </div>
                 <p className="text-lg text-center">뮤지컬</p>
               </div>
@@ -67,10 +73,16 @@ const SlideList = () => {
                   }
                 )}
               >
-                <div className="flex justify-center text-3xl">
-                  <PiAlienBold />
+                <div className="flex justify-center text-3xl text-secondary">
+                  <PiAlienBold
+                    className={
+                      tab === "rankingPlayEventList"
+                        ? "text-white"
+                        : "text-secondary"
+                    }
+                  />
                 </div>
-                <p className="text-lg text-center">연극</p>
+                <p className="text-lg text-center ">연극</p>
               </div>
             )}
             {data?.data["rankingClassicEventList"] !== null && (
@@ -103,7 +115,7 @@ const SlideList = () => {
               </div>
             )}
           </div>
-          <Slide data={data?.data[tab]} title="랭킹" viewCount={5} />
+          <Slide data={data?.data[tab]} title="이달의 랭킹" viewCount={5} />
           <Slide data={data?.data["saleEventList"]} title="세일" autoplay />
           <Slide data={data?.data["deadLineEventList"]} title="마감임박" />
           <Slide data={data?.data["recommendEventList"]} title="추천!" />
