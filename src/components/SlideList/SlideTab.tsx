@@ -1,9 +1,8 @@
 import cls from "classnames";
-import { useState } from "react";
 import { CiMicrophoneOn } from "react-icons/ci";
+import { IoIosFootball } from "react-icons/io";
 import { LuMusic } from "react-icons/lu";
 import { PiAlienBold, PiEqualizerBold } from "react-icons/pi";
-import { IoIosFootball } from "react-icons/io";
 
 type Props = {
   tab: string;

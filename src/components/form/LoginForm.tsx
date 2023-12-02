@@ -43,6 +43,7 @@ const LoginForm = () => {
         setIsLogin(true);
         userInfoApi(res.data.accessToken).then((res) => {
           setUserInfo(res?.data.role);
+          setUserInfo(res?.data.username);
         });
         setCookie("ticket-atk", res.data.accessToken, {
           path: "/",
@@ -53,7 +54,9 @@ const LoginForm = () => {
           secure: "/",
         });
         setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
+
         setName(parseJwt(res.data.accessToken).username);
+        console.log(data);
         router.push("/");
         axios
           .get(`${process.env.NEXT_PUBLIC_API_URL}/api/emitter/subscribe`, {

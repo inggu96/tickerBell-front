@@ -68,7 +68,7 @@ const Menu = () => {
                 toggleDropDown();
               }}
             >
-              <div className="flex text-xl transition duration-150 ease-in-out border-2 border-transparent rounded-full cursor-pointer focus:outline-none focus:border-white">
+              <div className="flex text-3xl transition duration-150 ease-in-out border-2 border-transparent rounded-full cursor-pointer focus:outline-none focus:border-white">
                 <FaUserCircle />
               </div>
               <div className="ml-2 ">
@@ -76,7 +76,7 @@ const Menu = () => {
               </div>
             </button>
             {dropMenu && (
-              <ul className="absolute right-0 p-2 mx-auto mt-16 bg-white border-r rounded shadow w-140 ">
+              <ul className="absolute right-0 p-2 mt-16 bg-white border-r rounded shadow w-200 ">
                 <li className="justify-center py-6 leading-3 text-center text-gray-600 cursor-pointer tex6-md hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
                   <Link href="/mypage/reserve" onClick={handleMyPageClick}>
                     마이페이지

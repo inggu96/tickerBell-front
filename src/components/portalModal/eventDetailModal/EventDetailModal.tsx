@@ -5,6 +5,9 @@ import classNames from "classnames";
 import React, { useState } from "react";
 import { Modal } from "../Modal";
 import ModalFrame from "../ModalFrame";
+import { useRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
+import { getCookie } from "@/util/authCookie";
 
 type BasicModalType = {
   setOnModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,6 +23,7 @@ type BasicModalType = {
   setSelectedSeats: React.Dispatch<React.SetStateAction<string[]>>;
   name: string;
   place: string;
+  price?: number[];
 };
 
 const EventDetailModal = ({
@@ -34,6 +38,7 @@ const EventDetailModal = ({
   setSelectedSeats,
   name,
   place,
+  price,
 }: BasicModalType) => {
   const [grade, setGrade] = useState(1);
   const [select, setSelect] = useState<string[]>([]);
@@ -41,7 +46,7 @@ const EventDetailModal = ({
   const selectSeat = (seat: string) => {
     if (selectedSeats.includes(seat)) {
       setSelectedSeats(selectedSeats.filter((s) => s !== seat));
-    } else if (selectedSeats.length < numberOfPeople) {
+    } else if (selectedSeats.length < 2) {
       setSelectedSeats([...selectedSeats, seat]);
     }
   };
@@ -58,6 +63,7 @@ const EventDetailModal = ({
   };
 
   console.log("cc", select);
+  console.log("가격", price);
 
   return (
     <ModalFrame
@@ -79,7 +85,7 @@ const EventDetailModal = ({
                 className={classNames(
                   "cursor-pointer border hover:border-primary p-2 text-center",
                   {
-                    "border-red border-2": selectedSeats.includes(item),
+                    "border-red border-1": selectedSeats.includes(item),
                   }
                 )}
               >
@@ -96,7 +102,7 @@ const EventDetailModal = ({
                 className={classNames(
                   "cursor-pointer border hover:border-primary p-2 text-center",
                   {
-                    "border-red border-2": selectedSeats.includes(item),
+                    "border-red border-1": selectedSeats.includes(item),
                   }
                 )}
               >
@@ -113,7 +119,7 @@ const EventDetailModal = ({
                 className={classNames(
                   "cursor-pointer border hover:border-primary p-2 text-center",
                   {
-                    "border-red border-2": selectedSeats.includes(item),
+                    "border-red border-1": selectedSeats.includes(item),
                   }
                 )}
               >

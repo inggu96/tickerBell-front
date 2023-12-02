@@ -48,19 +48,19 @@ const Index = () => {
           />
         )}
         <Header />
-        <div className="flex lg:flex-row flex-col justify-center">
-          <div className="flex lg:flex-row flex-col lg:w-1/2 md:w-8/12 w-full lg:px-8 lg:py-14 py-8 md:py-10 border-t bg-white lg:h-screen h-auto">
+        <div className="flex flex-col justify-center lg:flex-row">
+          <div className="flex flex-col w-full h-auto py-8 bg-white border-t lg:flex-row lg:w-1/2 md:w-8/12 lg:px-8 lg:py-14 md:py-10 lg:h-screen">
             <div className="w-2/4">
               <picture>
                 <img
-                  src={data?.data.imageUrls}
+                  src={data?.data.thumbNailUrl}
                   alt=""
-                  className="w-full object-center object-cover"
+                  className="object-cover object-center w-full"
                 />
               </picture>
             </div>
             <div className="w-2/4">
-              <ul className="p-12 grid grid-cols-2 gap-12">
+              <ul className="grid grid-cols-2 gap-12 p-12">
                 <li className="font-bold">이벤트명</li>
                 <li>{data?.data.name}</li>
                 <li className="font-bold">장소</li>
@@ -78,8 +78,8 @@ const Index = () => {
               </ul>
             </div>
           </div>
-          <div className="lg:w-1/4 md:w-8/12 w-full shadow h-full flex flex-col lg:h-screen lg:px-8 md:px-7 px-4 lg:py-20 md:py-10 py-6 gap-20">
-            <p className="lg:text-4xl text-3xl font-black leading-9 text-gray-800">
+          <div className="flex flex-col w-full h-full gap-20 px-4 py-6 shadow lg:w-1/4 md:w-8/12 lg:h-screen lg:px-8 md:px-7 lg:py-20 md:py-10">
+            <p className="text-3xl font-black leading-9 text-gray-800 lg:text-4xl">
               {data?.data.name}
             </p>
             <div className="mx-auto">

@@ -2,7 +2,12 @@ import apiInstance from "@/util/useInterceptor";
 // '예매'가 포함된 api
 
 // 비회원: 예매
-export async function noneUserReserveApi(selectedSeat: [], eventId: number, name: string, phone: number) {
+export async function noneUserReserveApi(
+  selectedSeat: [],
+  eventId: number,
+  name: string,
+  phone: number
+) {
   const res = await apiInstance.post("/ticketing-nonMember", {
     selectedSeat: selectedSeat,
     eventId: eventId,
@@ -12,16 +17,39 @@ export async function noneUserReserveApi(selectedSeat: [], eventId: number, name
   return res;
 }
 // 비회원: 예매 내역
-export async function noneUserReserveListApi(name: string, phone: number, page:number) {
+export async function noneUserReserveListApi(
+  name: string,
+  phone: number,
+  page: number
+) {
   const res = await apiInstance.get("/ticketing-nonMember", {
     params: { name: name, phone: phone, page: page, size: 10 },
   });
   return res;
 }
 // 비회원: 예매 취소
-export async function noneUserReserveDeleteApi(eventId: number, name: string, phone: number) {
+export async function noneUserReserveDeleteApi(
+  eventId: number,
+  name: string,
+  phone: number
+) {
   const res = await apiInstance.delete(`/ticketing-nonMember/${eventId}`, {
     params: { name: name, phone: phone },
+  });
+  return res;
+}
+
+export async function userReserveApi(
+  selectedSeat: [],
+  selectedDate: string,
+  eventId: number,
+  paymentId: number
+) {
+  const res = await apiInstance.post("/ticketing", {
+    selectedSeat: selectedSeat,
+    eventId: eventId,
+    selectedDate: selectedDate,
+    paymentId: paymentId,
   });
   return res;
 }

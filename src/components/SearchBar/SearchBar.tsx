@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import s from "./searchbar.module.scss";
+import React, { useState } from "react";
 
-import { Search34 } from "../images";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 const SearchBar = () => {

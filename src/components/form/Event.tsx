@@ -3,6 +3,7 @@
 import { postEventApi } from "@/api/events";
 import { day, weekDay } from "@/util/day";
 import dayjs from "dayjs";
+import { useMutation } from "@tanstack/react-query";
 import { KeyboardEvent, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -10,7 +11,7 @@ import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
 import { Dropzone } from "./Dropzone";
 import FRInput from "./FRInput";
-
+import { CheckBox, Input, Radio } from "./Input";
 import FRRadio from "./FRRadio";
 import { ImageUpload } from "./ImageUpload";
 import { InputField } from "./InputField";
@@ -32,7 +33,6 @@ const Event = () => {
     },
   });
 
-  const [atk, setAtk] = useState("");
   const [mapOnModal, setMapOnModal] = useState(false);
   const [thumbNailUrl, setThumbNailUrl] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -98,6 +98,13 @@ const Event = () => {
     }
   };
 
+  const createEventMutation = useMutation({
+    mutationFn: (payload: any) => postEventApi(payload),
+    onSuccess: (payload: any) => {
+      console.log("dd", payload);
+    },
+  });
+
   const onSubmit = async (onData: FormData): Promise<void> => {
     const tagNames = onData.tags.map((tag) => tag.name);
     const castingNames = onData.castings.map((casting) => casting.name);
@@ -106,8 +113,10 @@ const Event = () => {
 
     const payload = {
       name: onData.name,
-      startEvent: day(onData.startEvent),
-      endEvent: day(onData.endEvent),
+      startEvent: `${day(onData.startEvent)}Z`,
+      endEvent: `${day(onData.endEvent)}Z`,
+      dailyStartEvent: "20:30:00",
+      eventTime: 90,
       availablePurchaseTime: day(onData.availablePurchaseTime),
       tags: tagNames,
       castings: castingNames,
@@ -124,15 +133,9 @@ const Event = () => {
       imageUrls: updatedImageUrls,
     };
     console.log("dd", payload);
-
-    try {
-      const response = await postEventApi(atk, payload);
-      console.log(response);
-    } catch (error) {
-      console.error("이벤트 등록 실패:", error);
-    }
+    createEventMutation.mutate(payload);
   };
-
+  console.log("watch", watch());
   // 컴포넌트 반환
   return (
     <>
@@ -184,7 +187,7 @@ const Event = () => {
               )}
             </div>
             {/* 시작일 선택 */}
-            <div className="flex flex-row gap-12">
+            <div className="flex flex-row gap-12 mb-10">
               <div>
                 <label
                   htmlFor="startEvent"
@@ -198,9 +201,12 @@ const Event = () => {
                     name="startEvent"
                     minDate={weekDay(0).toDate()}
                     maxDate={weekDay(6).toDate()}
-                    rules={{ required: true }}
+                    rules={{ required: "시작일은 필수입니다." }}
                   />
                 </div>
+                {errors.startEvent && (
+                  <small role="alert">{errors.startEvent.message}</small>
+                )}
               </div>
               {/* 종료일 선택 */}
               <div>
@@ -291,13 +297,22 @@ const Event = () => {
                   type="text"
                   id="place"
                   maxLength={5}
-                  {...register("place", { required: true })}
+                  {...register("place", {
+                    required: "이벤트 주소는 필수 입력입니다.",
+                  })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMapOnModal(true);
+                  }}
                   value={enroll_company.address}
                   readOnly
                 />
               </div>
+              {errors.place && (
+                <small role="alert">{errors.place.message}</small>
+              )}
             </div>
-            <div className="flex flex-row ">
+            {/* <div className="flex flex-row ">
               <label>성인여부</label>
               <div className="flex flex-row gap-12">
                 <label>
@@ -313,12 +328,12 @@ const Event = () => {
                   미성년
                 </label>
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col">
               <span>카테고리</span>
               <div className="flex flex-row gap-12">
                 {["MUSICAL", "CONCERT", "PLAY", "CLASSIC", "SPORTS"].map(
-                  (category) => {
+                  (category, key) => {
                     const selectedCategory = watch("category");
                     const borderClass =
                       selectedCategory === category
@@ -326,22 +341,38 @@ const Event = () => {
                         : "border-gray-200";
 
                     return (
-                      <label key={category}>
-                        <FRRadio
-                          {...register("category", { required: true })}
+                      <>
+                        <Radio
+                          key={key}
                           label={category}
                           id={category}
                           type="radio"
                           value={category}
                           className={borderClass}
+                          {...register("category", {
+                            required: "카테고리를 선택해주세요",
+                          })}
                         />
-                      </label>
+                      </>
+                      // <label key={category}>
+                      //   <FRRadio
+                      //     {...register("category", { required: true })}
+                      //     label={category}
+                      //     id={category}
+                      //     type="radio"
+                      //     value={category}
+                      //     className={borderClass}
+                      //   />
+                      // </label>
                     );
                   }
                 )}
               </div>
+              {errors.category && (
+                <small role="alert">{errors.category.message}</small>
+              )}
             </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <span>성인여부</span>
               <div className="flex flex-row gap-12">
                 {["true", "false"].map((value) => {
@@ -364,8 +395,29 @@ const Event = () => {
                   );
                 })}
               </div>
+            </div> */}
+            <div className="flex flex-col mb-10">
+              <div className="flex flex-row">
+                <div className="mr-10">성인여부</div>
+                <div className="flex flex-row gap-12">
+                  {["adult", "none-adult"].map((value, key) => (
+                    <Radio
+                      key={key}
+                      label={value === "adult" ? "성인" : "미성년"}
+                      id={"isAdult"}
+                      value={value}
+                      {...register("isAdult", {
+                        required: "성인여부를 체크해주세요",
+                      })}
+                    />
+                  ))}
+                </div>
+              </div>
+              {errors.isAdult && (
+                <small role="alert">{errors.isAdult.message}</small>
+              )}
             </div>
-            <div className="flex flex-row">
+            {/* <div className="flex flex-row">
               <label className="mr-4">성인여부</label>
               <div className="flex flex-row gap-12">
                 {[true, false].map((value) => {
@@ -389,8 +441,8 @@ const Event = () => {
                   );
                 })}
               </div>
-            </div>
-            <div className="flex flex-row gap-12">
+            </div> */}
+            {/* <div className="flex flex-row gap-12">
               <FRInput
                 {...register("normalPrice", { required: true })}
                 className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
@@ -410,9 +462,37 @@ const Event = () => {
                 label="할인 금액"
                 id="saleDegree"
               />
+            </div> */}
+            <div className="flex flex-row gap-12 ">
+              <div>
+                <Input
+                  className=""
+                  label="일반 가격"
+                  id="normalPrice"
+                  type="number"
+                  {...register("normalPrice", {
+                    required: "가격은 필수입력입니다.",
+                  })}
+                />
+                {errors.normalPrice && (
+                  <small role="alert">{errors.normalPrice.message}</small>
+                )}
+              </div>
+              <Input
+                {...register("premiumPrice")}
+                label="프리미엄 가격"
+                id="premiumPrice"
+                type="number"
+              />
+              <Input
+                {...register("saleDegree")}
+                label="할인 금액"
+                id="saleDegree"
+                type="number"
+              />
             </div>
 
-            <div className="flex flex-row item-center">
+            {/* <div className="flex flex-row item-center">
               <FRInput
                 {...register("isSpecialA")}
                 label="특별 옵션 A"
@@ -433,12 +513,45 @@ const Event = () => {
                   type="checkbox"
                 />
               </label>
+            </div> */}
+            <div className="relative my-10 h-60">
+              <div className="absolute">
+                {watch().premiumPrice > 0 && (
+                  <>
+                    <small> 선택한 좌석이 프리미엄 가격으로 지정됩니다. </small>
+                    <div className="flex flex-row item-center">
+                      <CheckBox
+                        {...register("isSpecialA")}
+                        label="특별 옵션 A"
+                        id="isSpecialA"
+                        type="checkbox"
+                      />
+                      <CheckBox
+                        {...register("isSpecialB")}
+                        label="특별 옵션 B"
+                        id="isSpecialB"
+                        type="checkbox"
+                      />
+                      <CheckBox
+                        {...register("isSpecialC")}
+                        label="특별 옵션 C"
+                        id="isSpecialC"
+                        type="checkbox"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+
             <ImageUpload
               setThumbNailUrl={setThumbNailUrl}
               setImageUrls={setImageUrls}
             />
             <div>
+              <textarea placeholder="상세 내용 입력" />
+            </div>
+            {/* <div>
               <Controller
                 name="thumbnailUrl"
                 control={control}
@@ -456,7 +569,7 @@ const Event = () => {
                   />
                 )}
               />
-            </div>
+            </div> */}
             <Button
               className="mt-20 bg-blue-700 hover:bg-blue-800"
               type="submit"

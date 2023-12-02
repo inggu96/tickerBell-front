@@ -20,6 +20,7 @@ import { atom, selectorFamily } from "recoil";
 type UserState = {
   isLogin: boolean;
   role: string;
+  username: string;
   nonMember: {
     name?: string;
     phone?: number;
@@ -31,6 +32,7 @@ export const userState = atom<UserState>({
   default: {
     isLogin: false,
     role: "",
+    username: "",
     nonMember: {
       name: "", // 비회원용
       phone: 0, // 비회원용

@@ -47,7 +47,7 @@ const Slide = ({
         {
           breakpoint: 600,
           settings: {
-            slidesToShow: 1,
+            slidesToShow: 2,
           },
         },
       ],
@@ -61,13 +61,15 @@ const Slide = ({
     <div className="mt-40">
       {data && data !== null ? (
         <>
-          {title && <h4 className="text-center">{title}</h4>}
+          {title && (
+            <h4 className="mb-5 text-3xl font-bold text-center">{title}</h4>
+          )}
           <div className={className}>
             <Slider {...settings}>
               {data?.map((item: any, index: any) => (
                 <Link href={`/detail/${item.eventId}`} key={index}>
                   {title === "이달의 랭킹" && (
-                    <div className="absolute bottom-0 z-10 font-bold text-white translate-x-[-60px] font-shadow text-8xl p-100 ">
+                    <div className="absolute bottom-0 z-10 font-bold text-white translate-x-[-60px] text-8xl p-100 ">
                       {index + 1}
                     </div>
                   )}

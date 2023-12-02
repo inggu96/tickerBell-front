@@ -92,6 +92,9 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
     try {
       if (!thumbnail || images.length === 0) {
         alert("썸네일과 이미지 파일을 모두 추가해주세요.");
+      }
+      if (!thumbnail) {
+        alert("썸네일을 추가해주세요.");
         return;
       }
       setUploading(true);
@@ -112,10 +115,10 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
   };
 
   return (
-    <div className="flex flex-col  gap-22">
+    <div className="flex flex-col gap-22">
       <div
         {...getThumbnailRootProps()}
-        className=" flex flex-col items-center justify-center border-2 border-dashed border-gray-400 py-12 dropzone cursor-pointer"
+        className="flex flex-col items-center justify-center py-12 border-2 border-gray-400 border-dashed cursor-pointer  dropzone"
       >
         <p>썸네일 이미지를 드래그하거나 클릭하여 선택하세요.</p>
         <input
@@ -125,9 +128,9 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
           {...getThumbnailInputProps()}
         />
       </div>
-      <div className="w-1/2 sm:w-1/3 md:w-1/4 p-1">
+      <div className="w-1/2 p-1 sm:w-1/3 md:w-1/4">
         {thumbnailPreview && (
-          <div className="relative border rounded-md p-2 group  w-92 h-92">
+          <div className="relative p-2 border rounded-md group w-92 h-92">
             <Image
               src={thumbnailPreview.url}
               alt="썸네일 이미지"
@@ -135,12 +138,12 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
               height={368}
               className="object-cover"
             />
-            <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-between p-2 text-transparent hover:text-white group-hover:bg-black group-hover:bg-opacity-50">
+            <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-between p-2 text-transparent hover:text-white group-hover:bg-black group-hover:bg-opacity-50">
               <span className="text-xs break-words">
                 {`${thumbnailPreview.name} (${thumbnailPreview.size} bytes)`}
               </span>
               <button
-                className="absolute bottom-0 right-0 p-1 rounded-md hover:bg-red-600 bg-opacity-75"
+                className="absolute bottom-0 right-0 p-1 bg-opacity-75 rounded-md hover:bg-red-600"
                 onClick={() => removeFile(thumbnailPreview)}
               >
                 <IoTrash />
@@ -151,15 +154,15 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
       </div>
       <div
         {...getImagesRootProps()}
-        className="flex flex-col items-center justify-center border-2 border-dashed border-gray-400 py-5 dropzone cursor-pointer"
+        className="flex flex-col items-center justify-center py-5 border-2 border-gray-400 border-dashed cursor-pointer dropzone"
       >
         <input {...getImagesInputProps()} />
         <p>업로드할 이미지 파일들을 드래그하거나 클릭하여 선택하세요.</p>
       </div>
       <ul className="flex flex-row gap-12 ">
         {imagesPreview.map((file, index) => (
-          <li key={index} className="p-1 flex flex-row ">
-            <div className="relative border rounded-md p-2 group  w-92 h-92">
+          <li key={index} className="flex flex-row p-1 ">
+            <div className="relative p-2 border rounded-md group w-92 h-92">
               <Image
                 src={file.preview}
                 alt={file.name}
@@ -167,13 +170,13 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
                 height={368}
                 className="object-cover"
               />
-              <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-between p-2 text-transparent hover:text-white group-hover:bg-black group-hover:bg-opacity-50">
+              <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-between p-2 text-transparent hover:text-white group-hover:bg-black group-hover:bg-opacity-50">
                 <span className="text-xs break-words">{file.name}</span>
                 <span className="text-xs">
                   {(file.size / 1024).toFixed(2)} KB
                 </span>
                 <button
-                  className="absolute bottom-0 right-0 p-1 rounded-md hover:bg-red-600 bg-opacity-75"
+                  className="absolute bottom-0 right-0 p-1 bg-opacity-75 rounded-md hover:bg-red-600"
                   onClick={() => removeFile(file)}
                 >
                   <IoTrash />
