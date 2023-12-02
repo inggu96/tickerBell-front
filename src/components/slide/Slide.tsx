@@ -37,9 +37,23 @@ const Slide = ({
       autoplaySpeed: typeof autoplay === "boolean" ? 3000 : autoplay,
       nextArrow: <NextArrow />,
       prevArrow: <PrevArrow />,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+          },
+        },
+      ],
       // gap:
     }),
-    [autoplay, loop, speed]
+    [autoplay, loop, speed, viewCount]
   );
 
   // console.log('slidedata', data);
@@ -53,11 +67,11 @@ const Slide = ({
               {data?.map((item: any, index: any) => (
                 <Link href={`/detail/${item.eventId}`} key={index}>
                   {title === "이달의 랭킹" && (
-                    <div className="absolute bottom-0 z-10 font-bold text-white translate-x-[-50px] font-shadow text-8xl p-100 ">
+                    <div className="absolute bottom-0 z-10 font-bold text-white translate-x-[-60px] font-shadow text-8xl p-100 ">
                       {index + 1}
                     </div>
                   )}
-                  <div className="relative m-auto w-200 h-250 ">
+                  <div className="relative m-auto w-250 h-300 ">
                     <Image
                       src={item.thumbNailUrl}
                       alt={item.name}

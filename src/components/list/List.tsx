@@ -7,6 +7,7 @@ import Card from "../item/Card";
 import Spinner from "../spinner/Spinner";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Item from "../item/Item";
+import Skeleton from "../Skeleton/Skeleton";
 
 type ListType = {
   category: string;
@@ -56,7 +57,7 @@ export const List = ({ category, type, className }: ListType) => {
       <>
         {status === "pending" && (
           <div>
-            <Spinner />
+            <Skeleton />
           </div>
         )}
         {status === "success" && (
