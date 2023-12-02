@@ -9,6 +9,7 @@ import { PiEqualizerBold } from "react-icons/pi";
 import { LuMusic } from "react-icons/lu";
 import { CiMicrophoneOn } from "react-icons/ci";
 import { PiAlienBold } from "react-icons/pi";
+import SlideTab from "./SlideTab";
 
 const SlideList = () => {
   const [tab, setTab] = useState("rankingMusicalEventList");
@@ -22,9 +23,10 @@ const SlideList = () => {
 
   return (
     <>
+      <SlideTab setTab={setTab} tab={tab} />
       {!isError && isSuccess && (
         <div className="mt-60">
-          <div className="flex justify-center gap-8">
+          {/* <div className="flex justify-center gap-8">
             {data?.data["rankingMusicalEventList"] !== null && (
               <div
                 onClick={() => setTab("rankingMusicalEventList")}
@@ -114,7 +116,8 @@ const SlideList = () => {
                 스포츠
               </div>
             )}
-          </div>
+          </div> */}
+
           <Slide data={data?.data[tab]} title="이달의 랭킹" viewCount={5} />
           <Slide data={data?.data["saleEventList"]} title="세일" autoplay />
           <Slide data={data?.data["deadLineEventList"]} title="마감임박" />
