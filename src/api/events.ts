@@ -7,7 +7,11 @@ type allEventType = {
 };
 
 // 이벤트 리스트
-export async function getEventAllApi({ category, pageParam = 0, offset = 18 }: allEventType) {
+export async function getEventAllApi({
+  category,
+  pageParam = 0,
+  offset = 18,
+}: allEventType) {
   if (category !== "") {
     try {
       const res = await apiInstance.get(`/api/events/${category}`, {
@@ -46,13 +50,10 @@ export async function eventSlideApi() {
 }
 
 // 이벤트 등록
-export async function postEventApi(atk: string, data: any) {
+export async function postEventApi(data: any) {
+  console.log("등록", data);
   try {
-    const res = await apiInstance.post("/api/event", data, {
-      headers: {
-        Authorization: `Bearer ${atk}`,
-      },
-    });
+    const res = await apiInstance.post("/api/event", data, {});
     console.log("이벤트 등록성공:", res);
     return res;
   } catch (error) {

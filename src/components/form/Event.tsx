@@ -2,21 +2,17 @@
 
 import { postEventApi } from "@/api/events";
 import { day, weekDay } from "@/util/day";
-import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { KeyboardEvent, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
-import { Dropzone } from "./Dropzone";
-import FRInput from "./FRInput";
-import { CheckBox, Input, Radio } from "./Input";
-import FRRadio from "./FRRadio";
 import { ImageUpload } from "./ImageUpload";
+import { CheckBox, Input, Radio } from "./Input";
 import { InputField } from "./InputField";
 import { OnDatePicker } from "./OnDatePicker";
-import { fileWithPreview } from "./util";
 
 const Event = () => {
   const {

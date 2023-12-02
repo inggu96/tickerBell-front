@@ -20,11 +20,7 @@ import { atom, selectorFamily } from "recoil";
 type UserState = {
   isLogin: boolean;
   role: string;
-  username: string;
-  nonMember: {
-    name?: string;
-    phone?: number;
-  };
+  name: string;
 };
 
 export const userState = atom<UserState>({
@@ -32,11 +28,7 @@ export const userState = atom<UserState>({
   default: {
     isLogin: false,
     role: "",
-    username: "",
-    nonMember: {
-      name: "", // 비회원용
-      phone: 0, // 비회원용
-    },
+    name: "",
   },
 });
 
@@ -52,8 +44,8 @@ export const userSelector = selectorFamily({
           return user && user.isLogin;
         case "role":
           return user && user.role;
-        case "nonMember":
-          return user && user.nonMember;
+        case "name":
+          return user && user.name;
         default:
           return null;
       }
@@ -67,14 +59,9 @@ export const userSelector = selectorFamily({
             return { ...prevUserState, isLogin: newValue };
           case "role":
             return { ...prevUserState, role: newValue };
-          case "nonMember":
-            return {
-              ...prevUserState,
-              nonMember: {
-                name: newValue.name,
-                phone: newValue.phone,
-              },
-            };
+          case "name":
+            return { ...prevUserState, name: newValue };
+
           default:
             return prevUserState;
         }

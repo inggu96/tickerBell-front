@@ -13,11 +13,14 @@ import { FaUserCircle } from "react-icons/fa";
 
 const Menu = () => {
   const getRole = useRecoilValue(userSelector("role"));
+  const getName = useRecoilValue(userSelector("name"));
 
   const setIsLogin = useSetRecoilState(userSelector("isLogin"));
   const getIsLogin = useRecoilValue(userSelector("isLogin"));
+
   const router = useRouter();
   const [dropMenu, setDropMenu] = useState(false);
+  console.log("getname", getName);
 
   const toggleDropDown = () => {
     setDropMenu(!dropMenu);

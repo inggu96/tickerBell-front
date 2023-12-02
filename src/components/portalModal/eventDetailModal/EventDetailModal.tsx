@@ -5,9 +5,6 @@ import classNames from "classnames";
 import React, { useState } from "react";
 import { Modal } from "../Modal";
 import ModalFrame from "../ModalFrame";
-import { useRecoilState } from "recoil";
-import { useQuery } from "@tanstack/react-query";
-import { getCookie } from "@/util/authCookie";
 
 type BasicModalType = {
   setOnModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,28 +13,18 @@ type BasicModalType = {
   isDim?: boolean;
   onClose?: boolean;
   className?: string;
-  normalPrice: number;
-  numberOfPeople: number;
   selectedSeats: string[];
-  totalCost: number;
   setSelectedSeats: React.Dispatch<React.SetStateAction<string[]>>;
-  name: string;
-  place: string;
   price?: number[];
 };
 
 const EventDetailModal = ({
   setOnModal,
-  children,
   dimClick,
   isDim = true,
   className,
-  normalPrice,
-  numberOfPeople,
   selectedSeats,
   setSelectedSeats,
-  name,
-  place,
   price,
 }: BasicModalType) => {
   const [grade, setGrade] = useState(1);
@@ -50,17 +37,17 @@ const EventDetailModal = ({
       setSelectedSeats([...selectedSeats, seat]);
     }
   };
-  const totalCost = selectedSeats.length * normalPrice;
+  // const totalCost = selectedSeats.length * normalPrice;
 
-  console.log("normalPrice", normalPrice);
+  // console.log("normalPrice", normalPrice);
 
   const itemsA = ArrayGenerator(1, 20, "a-");
   const itemsB = ArrayGenerator(1, 20, "b-");
   const itemsC = ArrayGenerator(1, 20, "c-");
 
-  const handlePayment = () => {
-    onClickPayment(totalCost, name, place);
-  };
+  // const handlePayment = () => {
+  //   onClickPayment(totalCost, name, place);
+  // };
 
   console.log("cc", select);
   console.log("가격", price);
@@ -134,12 +121,12 @@ const EventDetailModal = ({
         <div className="flex gap-12">
           <ul>
             <p>선택한 좌석: {selectedSeats.join(", ")}</p>
-            <p>총 가격: {totalCost}원</p>
+            {/* <p>총 가격: {totalCost}원</p> */}
           </ul>
         </div>
-        <Button className="ml-auto w-100" size="medium" onClick={handlePayment}>
+        {/* <Button className="ml-auto w-100" size="medium" onClick={handlePayment}>
           결제하기
-        </Button>
+        </Button> */}
       </Modal.Buttons>
     </ModalFrame>
   );

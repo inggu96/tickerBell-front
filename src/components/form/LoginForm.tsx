@@ -54,7 +54,6 @@ const LoginForm = () => {
           secure: "/",
         });
         setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
-
         setName(parseJwt(res.data.accessToken).username);
         console.log(data);
         router.push("/");

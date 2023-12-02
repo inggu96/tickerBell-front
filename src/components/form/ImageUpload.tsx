@@ -90,9 +90,6 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
   const uploadFiles = async (e: any) => {
     e.stopPropagation();
     try {
-      if (!thumbnail || images.length === 0) {
-        alert("썸네일과 이미지 파일을 모두 추가해주세요.");
-      }
       if (!thumbnail) {
         alert("썸네일을 추가해주세요.");
         return;
@@ -118,7 +115,7 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
     <div className="flex flex-col gap-22">
       <div
         {...getThumbnailRootProps()}
-        className="flex flex-col items-center justify-center py-12 border-2 border-gray-400 border-dashed cursor-pointer  dropzone"
+        className="flex flex-col items-center justify-center py-12 border-2 border-gray-400 border-dashed cursor-pointer dropzone"
       >
         <p>썸네일 이미지를 드래그하거나 클릭하여 선택하세요.</p>
         <input
