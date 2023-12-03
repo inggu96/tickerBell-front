@@ -2,8 +2,7 @@
 
 import { parseJwt } from "@/hooks/useParseJwt";
 import axios from "axios";
-import { getCookie, setCookie } from "./authCookie";
-import { epochConvert } from "./epochConverter";
+import { getCookie, removeCookie, setCookie } from "./authCookie";
 
 const apiInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -40,10 +39,28 @@ const apiInstance = axios.create({
 // );
 apiInstance.interceptors.request.use(
   async (config) => {
-    const accessToken = getCookie("ticket-atk");
-    if (accessToken && !epochConvert(parseJwt(accessToken).exp)) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
+    const checkSessionExpiration = async () => {
+      const accessToken = getCookie("ticket-atk");
+      if (accessToken) {
+        const expirationTime = parseJwt(accessToken).exp;
+        const currentTime = Date.now() / 1000;
+        const timeLeft = expirationTime - currentTime;
+
+        if (timeLeft < 180) {
+          if (window.confirm("세션이 곧 만료됩니다. 연장하시겠습니까?")) {
+            const refreshToken = getCookie("ticket-rtk");
+            if (refreshToken) {
+              const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/reissue`,
+                { refreshToken: refreshToken }
+              );
+              setCookie("ticket-atk", response.data.accessToken);
+            }
+          }
+        }
+      }
+    };
+    setInterval(checkSessionExpiration, 60000);
     return config;
   },
   (error) => {
@@ -129,20 +146,27 @@ apiInstance.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = getCookie("ticket-rtk");
       if (refreshToken) {
-        const data = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/reissue`,
-          {
-            refreshToken: refreshToken,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setCookie("ticket-atk", data.data.accessToken);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${data.data.accessToken}`;
-        return apiInstance(originalRequest);
+        try {
+          const data = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/reissue`,
+            {
+              refreshToken: refreshToken,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          setCookie("ticket-atk", data.data.accessToken);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${data.data.accessToken}`;
+          return apiInstance(originalRequest);
+        } catch (error) {
+          removeCookie("ticket-atk");
+          removeCookie("ticket-rtk");
+
+          alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        }
       }
     }
     return Promise.reject(err);

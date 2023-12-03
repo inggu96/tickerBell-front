@@ -11,6 +11,7 @@ import Button from "../button/Button";
 import axios from "axios";
 import { parseJwt } from "@/hooks/useParseJwt";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   // const [sms, setSms] = useState(0);
@@ -61,6 +62,7 @@ const LoginForm = () => {
         });
         console.log(data);
         router.push("/");
+        toast.success("로그인되었습니다!");
         axios
           .get(`${process.env.NEXT_PUBLIC_API_URL}/api/emitter/subscribe`, {
             headers: {
