@@ -42,9 +42,10 @@ const LoginForm = () => {
       .then((res) => {
         setIsLogin(true);
         userInfoApi(res.data.accessToken).then((res) => {
-          setUserInfo(res?.data.role);
-          setUserInfo(res?.data.username);
+          setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
+          // setUserInfo(res?.data.username);
         });
+
         setCookie("ticket-atk", res.data.accessToken, {
           path: "/",
           secure: "/",
@@ -58,9 +59,6 @@ const LoginForm = () => {
           secure: true,
           maxAge: 24 * 60 * 60,
         });
-
-        setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
-        setName(parseJwt(res.data.accessToken).username);
         console.log(data);
         router.push("/");
         axios

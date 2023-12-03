@@ -23,6 +23,7 @@ const Menu = () => {
   const router = useRouter();
   const [dropMenu, setDropMenu] = useState(false);
   console.log("username", username);
+  console.log("getRole", getRole);
 
   const toggleDropDown = () => {
     setDropMenu(!dropMenu);
