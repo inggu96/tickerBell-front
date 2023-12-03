@@ -74,10 +74,10 @@ const Menu = () => {
 
       {getIsLogin && (
         <div className="items-center hidden xl:flex">
-          <div className="relative ml-6 ">
+          <div className="relative ml-6">
             <div className="flex flex-row ">
               {getIsLogin && (
-                <div className="flex items-center">
+                <div className="flex items-center mr-5">
                   {username}님! 환영합니다.
                 </div>
               )}

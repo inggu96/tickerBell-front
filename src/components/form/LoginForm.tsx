@@ -62,7 +62,7 @@ const LoginForm = () => {
         });
         console.log(data);
         router.push("/");
-        toast.success("로그인되었습니다!");
+        toast("로그인되었습니다!");
         axios
           .get(`${process.env.NEXT_PUBLIC_API_URL}/api/emitter/subscribe`, {
             headers: {
@@ -74,7 +74,17 @@ const LoginForm = () => {
           })
           .then((res) => console.log("sse test: ", res));
       })
-      .catch((err) => console.log("err", err));
+      .catch((err) => {
+        // 로그인 실패 처리
+        console.log("err", err);
+        if (err.response && err.response.status === 400) {
+          // 비밀번호 오류 또는 인증 실패
+          toast.error("비밀번호가 틀렸습니다.");
+        } else {
+          // 기타 오류 처리
+          toast.error("로그인에 실패했습니다.");
+        }
+      });
   };
 
   return (
