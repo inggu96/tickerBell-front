@@ -53,6 +53,12 @@ const LoginForm = () => {
           path: "/",
           secure: "/",
         });
+        setCookie("username", parseJwt(res.data.accessToken).username, {
+          path: "/",
+          secure: true,
+          maxAge: 24 * 60 * 60,
+        });
+
         setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
         setName(parseJwt(res.data.accessToken).username);
         console.log(data);
