@@ -39,6 +39,7 @@ export async function noneUserReserveDeleteApi(
   return res;
 }
 
+// 예매
 export async function userReserveApi(
   selectedSeat: [],
   selectedDate: string,
@@ -56,10 +57,10 @@ export async function userReserveApi(
 
 // 회원: 예매 내역 or 등록 내역 조회
 export async function userReserveListApi(atk: string, page: number) {
-  const res = await apiInstance.get("/api/member/my", {
-    // headers: {
-    //   Authorization: `Bearer ${atk}`,
-    // },
+  const res = await apiInstance.get("/ticketing", {
+    headers: {
+      Authorization: `Bearer ${atk}`,
+    },
     params: { page: page, size: 10 },
   });
   return res;

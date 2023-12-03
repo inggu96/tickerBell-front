@@ -115,7 +115,7 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
     <div className="flex flex-col gap-22">
       <div
         {...getThumbnailRootProps()}
-        className="flex flex-col items-center justify-center py-12 border-2 border-gray-400 border-dashed cursor-pointer dropzone"
+        className="flex flex-col items-center justify-center py-5 border-2 border-gray-400 border-dashed cursor-pointer "
       >
         <p>썸네일 이미지를 드래그하거나 클릭하여 선택하세요.</p>
         <input
@@ -125,17 +125,16 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
           {...getThumbnailInputProps()}
         />
       </div>
-      <div className="w-1/2 p-1 sm:w-1/3 md:w-1/4">
+      <div className="">
         {thumbnailPreview && (
-          <div className="relative p-2 border rounded-md group w-92 h-92">
+          <div className="relative flex w-full h-100">
             <Image
               src={thumbnailPreview.url}
               alt="썸네일 이미지"
-              width={368}
-              height={368}
-              className="object-cover"
+              fill
+              objectFit="contain"
             />
-            <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col justify-between p-2 text-transparent hover:text-white group-hover:bg-black group-hover:bg-opacity-50">
+            <div className="flex flex-col justify-between">
               <span className="text-xs break-words">
                 {`${thumbnailPreview.name} (${thumbnailPreview.size} bytes)`}
               </span>
@@ -151,7 +150,7 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
       </div>
       <div
         {...getImagesRootProps()}
-        className="flex flex-col items-center justify-center py-5 border-2 border-gray-400 border-dashed cursor-pointer dropzone"
+        className="flex flex-col items-center justify-center py-5 border-2 border-gray-400 border-dashed cursor-pointer"
       >
         <input {...getImagesInputProps()} />
         <p>업로드할 이미지 파일들을 드래그하거나 클릭하여 선택하세요.</p>

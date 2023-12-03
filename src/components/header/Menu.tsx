@@ -101,12 +101,12 @@ const Menu = () => {
             {dropMenu && (
               <ul className="absolute right-0 p-2 mt-16 bg-white border-r rounded shadow w-200 ">
                 <li className="justify-center py-6 leading-3 text-center text-gray-600 cursor-pointer tex6-md hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
-                  <Link href="/mypage/reserve" onClick={handleMyPageClick}>
+                  <Link href="/mypage/modify" onClick={handleMyPageClick}>
                     마이페이지
                   </Link>
                 </li>
                 <li className="flex items-center justify-center py-6 mt-6 leading-3 text-center text-gray-600 cursor-pointer text-md hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
-                  <Link href="/reserve">예약확인/취소</Link>
+                  <Link href="/mypage/reserve">예약확인/취소</Link>
                 </li>
                 <li className="flex items-center justify-center py-6 mt-6 leading-3 text-center text-gray-600 cursor-pointer text-md hover:text-indigo-700 focus:text-indigo-700 focus:outline-none">
                   <Button className="font-bold w-100" onClick={auth}>

@@ -60,7 +60,7 @@ apiInstance.interceptors.request.use(
         }
       }
     };
-    setInterval(checkSessionExpiration, 60000);
+    setInterval(checkSessionExpiration, 600000);
     return config;
   },
   (error) => {

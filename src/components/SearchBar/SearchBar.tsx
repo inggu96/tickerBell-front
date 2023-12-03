@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import { IoCloseCircleOutline } from "react-icons/io5";
-
+import { FaSearch } from "react-icons/fa";
 const SearchBar = () => {
   const router = useRouter();
   const [value, setValue] = useState("");
@@ -34,8 +34,16 @@ const SearchBar = () => {
     <form onSubmit={onSubmit}>
       <div className="flex items-center w-full h-full ">
         <div className="relative pt-2 mx-auto text-gray-600">
+          {!value && (
+            <div
+              className="absolute transform translate-y-1/2 right-8"
+              onClick={onClear}
+            >
+              <FaSearch />
+            </div>
+          )}
           <input
-            className="px-12 pr-16 text-sm bg-white border-2 border-gray-300 rounded-lg h-30 focus:outline-none"
+            className="px-12 pr-16 text-sm bg-white border-gray-500 rounded-full border-1 h-30 focus:outline-none focus:border-primary"
             type="text"
             placeholder="Search"
             onChange={onChange}
@@ -44,7 +52,7 @@ const SearchBar = () => {
           {value && (
             <button
               type="button"
-              className="absolute transform -translate-y-1/2 right-2 top-1/2"
+              className="absolute transform -translate-y-1/2 right-5 top-1/2"
               onClick={onClear}
             >
               <IoCloseCircleOutline />

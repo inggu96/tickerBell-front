@@ -79,7 +79,7 @@ const Slide = ({
                       alt={item.name}
                       fill
                       objectFit="contain"
-                      className="transition duration-300 rounded-xl drop-shadow-lg hover:-translate-y-4"
+                      className="transition-all duration-300 transform scale-100 rounded-xl drop-shadow-lg hover:scale-95"
                     />
                   </div>
                   <div className="py-12 px-22">

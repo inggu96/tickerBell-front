@@ -50,10 +50,13 @@ export async function eventSlideApi() {
 }
 
 // 이벤트 등록
-export async function postEventApi(data: any) {
-  console.log("등록", data);
+export async function postEventApi(atk: string, data: any) {
   try {
-    const res = await apiInstance.post("/api/event", data, {});
+    const res = await apiInstance.post("/api/event", data, {
+      headers: {
+        Authorization: `Bearer ${atk}`,
+      },
+    });
     console.log("이벤트 등록성공:", res);
     return res;
   } catch (error) {

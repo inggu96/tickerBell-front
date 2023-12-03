@@ -3,7 +3,7 @@ interface formType {
   password?: number;
   phone?: number;
   chkVertifysms?: number;
-};
+}
 
 interface EventFormType {
   startDate?: any;

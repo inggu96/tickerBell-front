@@ -75,14 +75,11 @@ const LoginForm = () => {
           .then((res) => console.log("sse test: ", res));
       })
       .catch((err) => {
-        // 로그인 실패 처리
         console.log("err", err);
         if (err.response && err.response.status === 400) {
-          // 비밀번호 오류 또는 인증 실패
-          toast.error("비밀번호가 틀렸습니다.");
+          toast.error("비밀번호를 확인해주세요.");
         } else {
-          // 기타 오류 처리
-          toast.error("로그인에 실패했습니다.");
+          toast.error("확인되지않는 ID입니다.");
         }
       });
   };
@@ -101,13 +98,9 @@ const LoginForm = () => {
                 id="username"
                 placeholder="아이디를 입력해주세요"
                 maxLength={10}
-                className="w-full px-3 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
+                className="w-full px-12 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
                 {...register("username", {
                   required: "아이디는 필수 입력입니다.",
-                  minLength: {
-                    value: 2,
-                    message: "2자리 이상 입력해주세요.",
-                  },
                 })}
               />
             </div>
@@ -123,17 +116,9 @@ const LoginForm = () => {
                 id="password"
                 placeholder="비밀번호를 입력해주세요"
                 minLength={6}
-                className="w-full px-3 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
+                className="w-full px-12 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다.",
-                  minLength: {
-                    value: 6,
-                    message: "6자리 이상 입력해주세요.",
-                  },
-                  pattern: {
-                    value: /^(?=.*[A-Za-z])(?=.*\d).+$/,
-                    message: "영어와 숫자를 포함해주세요",
-                  },
                 })}
               />
             </div>
