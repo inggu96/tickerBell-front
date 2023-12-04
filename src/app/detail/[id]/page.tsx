@@ -10,8 +10,10 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ko from "date-fns/locale/ko";
+import styles from "./DatePicker.module.scss";
 
 const Index = () => {
   const params = useParams();
@@ -48,8 +50,9 @@ const Index = () => {
 
   console.log("data", data?.data);
 
-  // const totalCost = numberOfPeople * data?.data.normalPrice;
+  const totalCost = numberOfPeople * data?.normalPrice;
   // const lastPartOfPlace = data.place ? LastPlace(data.place) : "";
+  registerLocale("ko", ko);
   if (isSuccess) {
     const price = seatPrice(
       data.discountNormalPrice,
@@ -68,6 +71,8 @@ const Index = () => {
     }
 
     const formatedTime = `${ampm} ${hour}시 ${timeParts[1]}분`;
+    const time24Hour = `${timeParts[0]}:${timeParts[1]}`;
+
     return (
       <div>
         {modal && (
@@ -253,15 +258,32 @@ const Index = () => {
               <DatePicker
                 selected={startDate}
                 onChange={(date: Date) => setStartDate(date)}
-                dateFormat="yyyy년 MM월 dd일"
+                dateFormat="yyyy년 MM월"
                 minDate={new Date(data.availablePurchaseTime)}
                 maxDate={new Date(data.endEvent)}
                 inline
+                shouldCloseOnSelect
+                locale="ko"
+                className={styles.datePicker}
+                wrapperClassName="bg-red"
               />
 
               {/* 이전날짜는 막기 공연기간동안만 예약이 되게  */}
             </div>
-            <div>
+            <div className="text-2xl font-bold text-center underline text-primary">
+              {startDate
+                .toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  weekday: "short",
+                })
+                .replace(/\. /g, ".")
+                .replace("일", "")}{" "}
+              {time24Hour}
+            </div>
+            <div className="text-right ">
+              인원 수 :
               <input
                 type="number"
                 value={numberOfPeople}
@@ -269,15 +291,13 @@ const Index = () => {
                 min="1"
                 max="2"
               />
-              <p className="text-2xl leading-normal text-gray-800">총액</p>
-              <p className="text-2xl font-bold leading-normal text-right text-gray-800">
-                {/* {totalCost}원 */}
-              </p>
-            </div>
-            <div>
-              상영일자 및 시간
-              <div>{`${day(startDate)}`}</div>
-              <div>{`${data.dailyStartEvent}`}</div>
+              명
+              <div className="flex justify-between mt-10">
+                <p className="text-2xl leading-normal text-gray-800">총액</p>
+                <p className="text-2xl font-bold leading-normal text-right text-gray-800">
+                  {totalCost}원
+                </p>
+              </div>
             </div>
             <Button className="w-full" onClick={() => setModal(true)}>
               예약하기

@@ -1,11 +1,7 @@
 import { RequestPayParams, RequestPayResponse } from "@/module/iamport";
 import axios from "axios";
 
-export const onClickPayment = (
-  totalCost: number,
-  name: string,
-  place: string
-) => {
+export const onClickPayment = () => {
   if (!window.IMP) return;
   /* 1. 가맹점 식별하기 */
   const { IMP } = window;
@@ -16,9 +12,9 @@ export const onClickPayment = (
     pg: "html5_inicis", // PG사 : https://developers.portone.io/docs/ko/tip/pg-2 참고
     pay_method: "card", // 결제수단
     merchant_uid: `mid_111`, // 주문번호
-    amount: totalCost, // 결제금액
+    amount: 1000, // 결제금액
     name: "아임포트 결제 데이터 분석", // 주문명
-    buyer_name: name, // 구매자 이름
+    buyer_name: "홍길동", // 구매자 이름
     buyer_tel: "01012341234", // 구매자 전화번호
     buyer_email: "example@example.com", // 구매자 이메일
     buyer_addr: "신사동 661-16", // 구매자 주소
@@ -30,10 +26,11 @@ export const onClickPayment = (
 };
 
 function callback(response: RequestPayResponse) {
-  const { success, error_msg } = response;
+  const { success, error_msg, imp_uid } = response;
 
   if (success) {
     alert("결제 성공");
+    console.log("Payment ID:", imp_uid);
   } else {
     alert(`결제 실패: ${error_msg}`);
   }

@@ -41,7 +41,7 @@ const EventDetailModal = ({
       setSelectedSeats([...selectedSeats, seat]);
     }
   };
-  // const totalCost = selectedSeats.length * normalPrice;
+  const totalCost = selectedSeats.length * Number(price);
 
   // console.log("normalPrice", normalPrice);
 
@@ -49,9 +49,9 @@ const EventDetailModal = ({
   const itemsB = ArrayGenerator(1, 20, "b-");
   const itemsC = ArrayGenerator(1, 20, "c-");
 
-  // const handlePayment = () => {
-  //   onClickPayment(totalCost, name, place);
-  // };
+  const handlePayment = () => {
+    onClickPayment();
+  };
 
   console.log("cc", selectDate, eventId);
   console.log("가격", price);
@@ -125,12 +125,12 @@ const EventDetailModal = ({
         <div className="flex gap-12">
           <ul>
             <p>선택한 좌석: {selectedSeats.join(", ")}</p>
-            {/* <p>총 가격: {totalCost}원</p> */}
+            <p>총 가격: {totalCost}원</p>
           </ul>
         </div>
-        {/* <Button className="ml-auto w-100" size="medium" onClick={handlePayment}>
+        <Button className="ml-auto w-100" size="medium" onClick={handlePayment}>
           결제하기
-        </Button> */}
+        </Button>
       </Modal.Buttons>
     </ModalFrame>
   );
