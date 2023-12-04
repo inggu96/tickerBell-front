@@ -73,7 +73,7 @@ const Menu = () => {
       )}
 
       {getIsLogin && (
-        <div className="items-center hidden xl:flex">
+        <div className="items-center ">
           <div className="relative ml-6">
             <div className="flex flex-row ">
               {getIsLogin && (
