@@ -32,31 +32,25 @@ const SearchBar = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex items-center w-full h-full ">
-        <div className="relative pt-2 mx-auto text-gray-600">
-          {!value && (
-            <div
-              className="absolute transform translate-y-1/2 right-8"
-              onClick={onClear}
-            >
-              <FaSearch />
-            </div>
-          )}
+      <div className="flex items-center w-1/2 h-full mx-auto bg-whitemb-30">
+        <div className="relative w-4/5 pt-2 mx-auto text-gray-600 ">
           <input
-            className="px-12 pr-16 text-sm bg-white border-gray-500 rounded-full border-1 h-30 focus:outline-none focus:border-primary"
+            className="w-full h-40 px-12 pr-16 text-sm bg-white border-none rounded-full shadow-lg focus:outline-none drop-shadow-md"
             type="text"
             placeholder="Search"
             onChange={onChange}
             value={value}
           />
-          {value && (
+          {value ? (
             <button
               type="button"
-              className="absolute transform -translate-y-1/2 right-5 top-1/2"
+              className="absolute transform -translate-y-1/2 right-15 top-1/2"
               onClick={onClear}
             >
               <IoCloseCircleOutline />
             </button>
+          ) : (
+            <FaSearch className="absolute transform -translate-y-1/2 right-15 top-1/2" />
           )}
         </div>
       </div>
