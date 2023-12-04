@@ -16,6 +16,8 @@ type BasicModalType = {
   selectedSeats: string[];
   setSelectedSeats: React.Dispatch<React.SetStateAction<string[]>>;
   price?: number[];
+  selectData: any;
+  eventId: string | string[];
 };
 
 const EventDetailModal = ({
@@ -26,6 +28,8 @@ const EventDetailModal = ({
   selectedSeats,
   setSelectedSeats,
   price,
+  selectData,
+  eventId,
 }: BasicModalType) => {
   const [grade, setGrade] = useState(1);
   const [select, setSelect] = useState<string[]>([]);
@@ -49,7 +53,7 @@ const EventDetailModal = ({
   //   onClickPayment(totalCost, name, place);
   // };
 
-  console.log("cc", select);
+  console.log("cc", selectData, eventId);
   console.log("가격", price);
 
   return (

@@ -5,7 +5,7 @@ import Button from "@/components/button/Button";
 import Header from "@/components/header/Header";
 import EventDetailModal from "@/components/portalModal/eventDetailModal/EventDetailModal";
 import { seatPrice } from "@/hooks/useSeat";
-import { calenderDateType, date } from "@/util/day";
+import { calenderDateType, date, day } from "@/util/day";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -66,6 +66,8 @@ const Index = () => {
             setSelectedSeats={setSelectedSeats}
             setOnModal={() => setModal(false)}
             price={price}
+            selectData={startDate}
+            eventId={params.id}
           />
         )}
         <Header />
@@ -139,8 +141,9 @@ const Index = () => {
               </p>
             </div>
             <div>
-              회차
-              <div>{"상영시간"}</div>
+              상영일자 및 시간
+              <div>{`${day(startDate)}`}</div>
+              <div>{`${data.dailyStartEvent}`}</div>
             </div>
             <Button className="w-full" onClick={() => setModal(true)}>
               예약하기

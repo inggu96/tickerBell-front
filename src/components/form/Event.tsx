@@ -6,7 +6,12 @@ import { useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { KeyboardEvent, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
 import { ImageUpload } from "./ImageUpload";
@@ -37,6 +42,7 @@ const Event = () => {
   const [enroll_company, setEnroll_company] = useState({
     address: "",
   });
+  const today = new Date();
 
   const {
     fields: tagsFields,
@@ -106,15 +112,15 @@ const Event = () => {
     },
   });
 
-  const onSubmit = async (onData: FormData): Promise<void> => {
-    const tagNames = onData.tags.map((tag) => tag.name);
-    const castingNames = onData.castings.map((casting) => casting.name);
-    const hostNames = onData.hosts.map((host) => host.name);
+  const onSubmit: SubmitHandler<FormData> = async (onData: any) => {
+    const tagNames = onData?.tags?.map((tag: any) => tag.name);
+    const castingNames = onData?.castings?.map((casting: any) => casting.name);
+    const hostNames = onData?.hosts?.map((host: any) => host.name);
 
     const payload = {
       name: onData.name,
-      startEvent: `${day(onData.startEvent)}Z`,
-      endEvent: `${day(onData.endEvent)}Z`,
+      startEvent: dayjs(onData.startEvent).format("YYYY-MM-DDT00:00:00") + "Z",
+      endEvent: dayjs(onData.endEvent).format("YYYY-MM-DDT00:00:00") + "Z",
       dailyStartEvent: `${dayjs(onData.dailyStartEvent).format("HH:mm")}`,
       eventTime: Number(onData.eventTime),
       availablePurchaseTime: `${dayjs(onData.availablePurchaseTime).format(
@@ -211,7 +217,11 @@ const Event = () => {
                         onChange={(date) =>
                           field.onChange(dayjs(date).toDate())
                         }
-                        minDate={weekDay(2).toDate()}
+                        minDate={
+                          watch("startEvent")
+                            ? watch("startEvent")
+                            : weekDay(2).toDate()
+                        }
                       />
                     )}
                   />
@@ -275,6 +285,7 @@ const Event = () => {
                         onChange={(date) =>
                           field.onChange(dayjs(date).toDate())
                         }
+                        minDate={weekDay(0).toDate()}
                       />
                     )}
                   />
@@ -379,7 +390,7 @@ const Event = () => {
                 <div className="mb-10">
                   <Button
                     type="button"
-                    onClick={(e) => {
+                    onClick={(e: any) => {
                       e.stopPropagation();
                       setMapOnModal(true);
                     }}
@@ -554,6 +565,7 @@ const Event = () => {
             <Button
               className="mt-20 bg-blue-700 hover:bg-blue-800"
               type="submit"
+              onClick={onSubmit}
             >
               이벤트 생성
             </Button>

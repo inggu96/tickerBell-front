@@ -57,7 +57,7 @@ export async function userReserveApi(
 
 // 회원: 예매 내역 or 등록 내역 조회
 export async function userReserveListApi(atk: string, page: number) {
-  const res = await apiInstance.get("/ticketing", {
+  const res = await apiInstance.get("/api/member/my", {
     headers: {
       Authorization: `Bearer ${atk}`,
     },
@@ -75,5 +75,10 @@ export async function userDeleteReserverIdApi(id: number) {
 // 등록 내역 삭제
 export async function userDeleteResigsterIdApi(id: number) {
   const res = await apiInstance.post(`/api/event/cancel/${id}`, {});
+  return res;
+}
+
+export async function reserveEventSeatReturnApi(id: number) {
+  const res = await apiInstance.post(`/selectted-seat/${id}`, {});
   return res;
 }
