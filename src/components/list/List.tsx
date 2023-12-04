@@ -1,12 +1,10 @@
 "use client";
 
 import { getEventAllApi } from "@/api/events";
-import React, { useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Card from "../item/Card";
-import Spinner from "../spinner/Spinner";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import Item from "../item/Item";
 import Skeleton from "../Skeleton/Skeleton";
 
 type ListType = {
@@ -62,6 +60,9 @@ export const List = ({ category, type, className }: ListType) => {
         )}
         {status === "success" && (
           <div className="grid grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-x-16 gap-y-36 place-items-center mt-60">
+            <h4 className="mb-5 text-3xl font-bold text-center">
+              전체 이벤트{" "}
+            </h4>
             {data &&
               data?.pages.map(
                 (item: any) =>

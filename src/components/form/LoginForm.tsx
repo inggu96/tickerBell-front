@@ -43,7 +43,7 @@ const LoginForm = () => {
       .then((res) => {
         setIsLogin(true);
         userInfoApi(res.data.accessToken).then((res) => {
-          setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
+          setUserInfo(res?.data.role);
           // setUserInfo(res?.data.username);
         });
 
@@ -60,7 +60,8 @@ const LoginForm = () => {
           secure: true,
           maxAge: 24 * 60 * 60,
         });
-        console.log(data);
+        setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
+        console.log("로그인 데이터 ", data);
         router.push("/");
         toast("로그인되었습니다!");
         axios
