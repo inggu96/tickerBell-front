@@ -58,6 +58,16 @@ const Index = () => {
       data.isSpecialSeatB,
       data.isSpecialSeatC
     );
+    const timeParts = data?.dailyStartEvent.split(":");
+    let hour = parseInt(timeParts[0], 10);
+    let ampm = "오전";
+
+    if (hour >= 12) {
+      ampm = "오후";
+      hour = hour > 12 ? hour - 12 : hour;
+    }
+
+    const formatedTime = `${ampm} ${hour}시 ${timeParts[1]}분`;
     return (
       <div>
         {modal && (
@@ -67,7 +77,7 @@ const Index = () => {
             setSelectedSeats={setSelectedSeats}
             setOnModal={() => setModal(false)}
             price={price}
-            selectData={startDate}
+            selectDate={startDate}
             eventId={params.id}
           />
         )}
@@ -94,7 +104,10 @@ const Index = () => {
                     <p className="font-bold flex-grow-1 w-90 min-w-80 ">
                       공연시간
                     </p>
-                    <p className="text-left flex-grow-3 w-170">90분</p>
+                    <p className="text-left flex-grow-3 w-170 whitespace-nowrap">
+                      <span className="font-bold">기간 중</span> {formatedTime}{" "}
+                      ~ 90분간 진행
+                    </p>
                   </li>
                   <li className="flex">
                     <p className="font-bold flex-grow-1 w-90 min-w-80 ">
