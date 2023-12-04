@@ -61,7 +61,7 @@ export const List = ({ category, type, className }: ListType) => {
           </div>
         )}
         {status === "success" && (
-          <div className="grid grid-cols-6 md:grid-cols-6 sm:grid-cols-2 gap-x-16 gap-y-36 place-items-center mt-60">
+          <div className="grid grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-x-16 gap-y-36 place-items-center mt-60">
             {data &&
               data?.pages.map(
                 (item: any) =>

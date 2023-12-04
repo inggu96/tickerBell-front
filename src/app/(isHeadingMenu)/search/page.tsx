@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useParams, useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react'
+import { useParams, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import Card from '@/components/item/Card';
+import Card from "@/components/item/Card";
 
 const Index = () => {
   const searchParams = useSearchParams();
-  const keyword = searchParams.get('keyword')
+  const keyword = searchParams.get("keyword");
 
   const SEARCH = gql`
     query Search($keyword: String!) {
@@ -44,38 +44,46 @@ const Index = () => {
         isAdult
       }
     }
-  `
+  `;
 
   const { loading, error, data } = useQuery(SEARCH, {
-    variables: { keyword: keyword || '' },
+    variables: { keyword: keyword || "" },
   });
 
   // console.log('data', data);
 
   return (
     <div>
-      {
-        keyword !== null && data?.getEventByName.length === 0 && data?.getEventByPlace.length === 0 &&
-        <>검색 결과가 없습니다.</>
-      }
-      <div className="grid grid-cols-6 gap-x-16 gap-y-36 place-items-center mt-60">
-        {keyword !== null && data?.getEventByName.length > 0 &&
+      {keyword &&
+      data?.getEventByPlace.length === 0 &&
+      data?.getEventByName.length === 0 ? (
+        <div className="flex items-center justify-center h-20">
+          검색 결과가 없습니다.
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-20">
+          {keyword} 검색한 내용입니다 !
+        </div>
+      )}
+      <div className="grid grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-x-16 gap-y-36 place-items-center mt-60">
+        {keyword !== null &&
+          data?.getEventByName.length > 0 &&
           data.getEventByName.map((item: any, index: any) => (
             <Card data={item} key={index} />
-          ))
-        }
-        {keyword !== null && data?.getEventByPlace.length > 0 &&
+          ))}
+        {keyword !== null &&
+          data?.getEventByPlace.length > 0 &&
           data.getEventByPlace.map((item: any, index: any) => (
             <Card data={item} key={index} />
-          ))
-        }
-        {keyword === null && data?.getEventByName.length > 0 &&
+          ))}
+        {keyword === null &&
+          data?.getEventByName.length > 0 &&
           data.getEventByName.map((item: any, index: any) => (
             <Card data={item} key={index} />
           ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;
