@@ -44,14 +44,14 @@ export default function RootLayout({
         />
         <Script src="https://developers.kakao.com/sdk/js/kakao.js" />
         {/* 네이버 지도 */}
-        <Script
+        {/* <Script
           type="text/javascript"
           src="http://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ugm16gkcw2"
         />
         <Script
           type="text/javascript"
           src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=ugm16gkcw2&submodules=geocoder"
-        ></Script>
+        ></Script> */}
       </head>
       <body>
         <QueryProviders>
