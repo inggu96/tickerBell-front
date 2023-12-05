@@ -5,6 +5,9 @@ import classNames from "classnames";
 import React, { useState } from "react";
 import { Modal } from "../Modal";
 import ModalFrame from "../ModalFrame";
+import { useMutation } from "@tanstack/react-query";
+import { userReserveApi } from "@/api/ticketing";
+import { getCookie } from "@/util/authCookie";
 
 type BasicModalType = {
   setOnModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,9 +20,14 @@ type BasicModalType = {
   setSelectedSeats: React.Dispatch<React.SetStateAction<string[]>>;
   price?: number[];
   selectDate: any;
-  eventId: string | string[];
+  eventId: string;
 };
-
+type ReservePayload = {
+  selectedSeat: string[];
+  selectedDate: string;
+  eventId: string;
+  paymentId: number;
+};
 const EventDetailModal = ({
   setOnModal,
   dimClick,
@@ -49,12 +57,38 @@ const EventDetailModal = ({
   const itemsB = ArrayGenerator(1, 20, "b-");
   const itemsC = ArrayGenerator(1, 20, "c-");
 
-  const handlePayment = () => {
-    onClickPayment();
-  };
-
   console.log("cc", selectDate, eventId);
   console.log("가격", price);
+
+  const reserveMutation = useMutation({
+    mutationFn: (payload: ReservePayload) => {
+      const accessToken = getCookie("ticket-atk");
+      return userReserveApi(
+        accessToken,
+        payload.selectedSeat,
+        payload.selectedDate,
+        payload.eventId,
+        payload.paymentId
+      );
+    },
+    onSuccess: (res) => {
+      console.log("예매 등록 성공:", res);
+    },
+    onError: (err) => {
+      console.error("예매 등록 실패:", err);
+    },
+  });
+
+  const handlePayment = () => {
+    onClickPayment();
+    // 예매 등록 뮤테이션 실행
+    reserveMutation.mutate({
+      selectedSeat: selectedSeats,
+      selectedDate: selectDate,
+      eventId: eventId,
+      paymentId: 1212,
+    });
+  };
 
   return (
     <ModalFrame

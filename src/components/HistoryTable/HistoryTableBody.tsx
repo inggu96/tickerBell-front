@@ -88,7 +88,7 @@ export const HistoryTableBody: React.FC<HistoryTableBodyProps> = ({ row }) => {
     }
   };
 
-  console.log("r", row);
+  // console.log("r", row);
 
   return (
     <>

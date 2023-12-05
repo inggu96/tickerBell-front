@@ -41,18 +41,33 @@ export async function noneUserReserveDeleteApi(
 
 // 예매
 export async function userReserveApi(
-  selectedSeat: [],
+  atk: string,
+  selectedSeat: string[],
   selectedDate: string,
-  eventId: number,
+  eventId: string,
   paymentId: number
 ) {
-  const res = await apiInstance.post("/ticketing", {
-    selectedSeat: selectedSeat,
-    eventId: eventId,
-    selectedDate: selectedDate,
-    paymentId: paymentId,
-  });
-  return res;
+  try {
+    const res = await apiInstance.post(
+      "/ticketing",
+      {
+        selectedSeat,
+        eventId,
+        selectedDate,
+        paymentId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${atk}`,
+        },
+      }
+    );
+    console.log("예매 성공:", res);
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 // 회원: 예매 내역 or 등록 내역 조회
