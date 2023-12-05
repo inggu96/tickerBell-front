@@ -5,7 +5,7 @@ export const onClickPayment = () => {
   if (!window.IMP) return;
   /* 1. 가맹점 식별하기 */
   const { IMP } = window;
-  IMP.init("imp87773672"); // 가맹점 식별코드
+  IMP.init("imp04540858"); // 가맹점 식별코드
 
   /* 2. 결제 데이터 정의하기 */
   const data: RequestPayParams = {
@@ -14,7 +14,7 @@ export const onClickPayment = () => {
     merchant_uid: `mid_111`, // 주문번호
     amount: 1000, // 결제금액
     name: "아임포트 결제 데이터 분석", // 주문명
-    buyer_name: "홍길동", // 구매자 이름
+    buyer_name: "", // 구매자 이름
     buyer_tel: "01012341234", // 구매자 전화번호
     buyer_email: "example@example.com", // 구매자 이메일
     buyer_addr: "신사동 661-16", // 구매자 주소
@@ -24,13 +24,13 @@ export const onClickPayment = () => {
   /* 4. 결제 창 호출하기 */
   IMP.request_pay(data, callback);
 };
-
 function callback(response: RequestPayResponse) {
   const { success, error_msg, imp_uid } = response;
 
   if (success) {
     alert("결제 성공");
-    console.log("Payment ID:", imp_uid);
+    console.log("imp_uid:", imp_uid); // 결제 성공 시 imp_uid 출력
+    // 여기에서 imp_uid를 사용한 추가 작업 수행 가능
   } else {
     alert(`결제 실패: ${error_msg}`);
   }
