@@ -83,7 +83,7 @@ const Index = () => {
             setOnModal={() => setModal(false)}
             price={price}
             selectDate={startDate}
-            eventId={params.id}
+            eventId={Array.isArray(params.id) ? params.id[0] : params.id}
           />
         )}
         <Header />

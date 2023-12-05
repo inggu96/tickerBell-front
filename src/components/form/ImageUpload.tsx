@@ -1,12 +1,12 @@
 "use client";
 
 import { postEventImageApi } from "@/api/events";
-import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { IoTrash } from "react-icons/io5";
-import { getCookie } from "../../util/authCookie";
 import Button from "../../components/button/Button";
-import Image from "next/image";
+import { getCookie } from "../../util/authCookie";
 
 type Image = {
   setThumbNailUrl: (url: string) => void;

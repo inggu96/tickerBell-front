@@ -20,12 +20,12 @@ type BasicModalType = {
   setSelectedSeats: React.Dispatch<React.SetStateAction<string[]>>;
   price?: number[];
   selectDate: any;
-  eventId: string | string[];
+  eventId: string;
 };
 type ReservePayload = {
   selectedSeat: string[];
   selectedDate: string;
-  eventId: string | string[];
+  eventId: string;
   paymentId: number;
 };
 const EventDetailModal = ({

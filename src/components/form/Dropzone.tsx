@@ -43,7 +43,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
             key={index}
             className="flex flex-row w-1/2 p-1 sm:w-1/3 md:w-1/4 "
           >
-            <div className="relative p-2 border rounded-md group w-92 h-92">
+            {/* <div className="relative p-2 border rounded-md group w-92 h-92">
               <Image
                 src={file.preview}
                 alt={file.name}
@@ -65,7 +65,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
                   x
                 </button>
               </div>
-            </div>
+            </div> */}
           </li>
         ))}
       </ul>

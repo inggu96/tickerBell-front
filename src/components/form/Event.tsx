@@ -1,10 +1,12 @@
 "use client";
 
 import { postEventApi } from "@/api/events";
-import { day, weekDay } from "@/util/day";
+import { getCookie } from "@/util/authCookie";
+import { weekDay } from "@/util/day";
 import { useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { KeyboardEvent, useState } from "react";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Controller,
@@ -17,9 +19,6 @@ import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
 import { ImageUpload } from "./ImageUpload";
 import { CheckBox, Input, Radio } from "./Input";
 import { InputField } from "./InputField";
-import { OnDatePicker } from "./OnDatePicker";
-import DatePicker from "react-datepicker";
-import { getCookie } from "@/util/authCookie";
 
 const Event = () => {
   const {
