@@ -16,13 +16,12 @@ export const SideBar = () => {
       <ul>
         {getRole === "ROLE_USER" || getIsLogin
           ? sideData.show.map((route, key) => (
-            <SideBarItem key={key} route={route} />
-          ))
+              <SideBarItem key={key} route={route} />
+            ))
           : sideData.to.map((route, key) => (
-            <SideBarItem key={key} route={route} />
-          ))}
+              <SideBarItem key={key} route={route} />
+            ))}
       </ul>
-      <LogoutButton />
     </aside>
   );
 };
