@@ -1,11 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
-import s from './searchbar.module.scss';
+import React, { useState } from "react";
 
-import { Search34 } from '../images';
-
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 const SearchBar = () => {
   const router = useRouter();
   const [value, setValue] = useState("");
@@ -19,24 +18,44 @@ const SearchBar = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setValue('');
-    if(value) {
-      router.push(`/search?keyword=${value}`)
+    setValue("");
+    if (value) {
+      router.push(`/search?keyword=${value}`);
     } else {
-      router.push(`/search`)
+      router.push(`/search`);
     }
   };
 
+  const onClear = () => {
+    setValue("");
+  };
 
   return (
-    <form className={s.searchbar} onSubmit={onSubmit}>
-      <input type="text" placeholder='검색' onChange={onChange} value={value} />
-      <Search34 onClick={(e:any) => {
-        console.log('cc');
-        onSubmit(e);
-      }} />
+    <form onSubmit={onSubmit}>
+      <div className="flex items-center w-1/2 h-full mx-auto bg-whitemb-30">
+        <div className="relative w-4/5 pt-2 mx-auto text-gray-600 ">
+          <input
+            className="w-full h-40 px-12 pr-16 text-sm bg-white border-none rounded-full shadow-lg focus:outline-none drop-shadow-md"
+            type="text"
+            placeholder="Search"
+            onChange={onChange}
+            value={value}
+          />
+          {value ? (
+            <button
+              type="button"
+              className="absolute transform -translate-y-1/2 right-15 top-1/2"
+              onClick={onClear}
+            >
+              <IoCloseCircleOutline />
+            </button>
+          ) : (
+            <FaSearch className="absolute transform -translate-y-1/2 right-15 top-1/2" />
+          )}
+        </div>
+      </div>
     </form>
-  )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;

@@ -39,8 +39,8 @@ module.exports = {
         "3xl": "24px",
       },
       colors: {
-        primary: "#6366f1",
-        secondary: "#29303d",
+        primary: "#fe2325",
+        secondary: "#6366f1",
         red: "#ff0000",
       },
       saturate: {
@@ -48,6 +48,10 @@ module.exports = {
         30: ".3",
         50: ".5",
         70: ".7",
+      },
+      flexGrow: {
+        "1": 0.5,
+        "3": 1.5,
       },
     },
   },

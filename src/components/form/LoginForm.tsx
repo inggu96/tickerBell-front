@@ -9,18 +9,15 @@ import { useForm } from "react-hook-form";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import Button from "../button/Button";
 import axios from "axios";
+import { parseJwt } from "@/hooks/useParseJwt";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
-type formPropsType = {
-  tab: number;
-  setTab?: React.Dispatch<React.SetStateAction<number>>;
-};
-
-const LoginForm = ({ tab, setTab }: formPropsType) => {
+const LoginForm = () => {
   // const [sms, setSms] = useState(0);
   const setIsLogin = useSetRecoilState(userSelector("isLogin"));
   const setUserInfo = useSetRecoilState(userSelector("role"));
-  const setNonMember = useSetRecoilState(userSelector('nonMember'));
-
+  const setName = useSetRecoilState(userSelector("name"));
 
   const router = useRouter();
 
@@ -40,145 +37,109 @@ const LoginForm = ({ tab, setTab }: formPropsType) => {
   // console.log('회원가입 폼 : ', watch(), isRegistration)
 
   const onSubmit = (data: any) => {
-    if (tab === 1) {
-      userLoginApi(data.username, data.password)
-        .then((res) => {
-          setIsLogin(true);
-          userInfoApi(res.data.accessToken).then((res) => {
-            setUserInfo(res?.data.role)
+    // 회원
+
+    userLoginApi(data.username, data.password)
+      .then((res) => {
+        setIsLogin(true);
+        userInfoApi(res.data.accessToken).then((res) => {
+          setUserInfo(res?.data.role);
+          // setUserInfo(res?.data.username);
+        });
+
+        setCookie("ticket-atk", res.data.accessToken, {
+          path: "/",
+          secure: "/",
+        });
+        setCookie("ticket-rtk", res.data.refreshToken, {
+          path: "/",
+          secure: "/",
+        });
+        setCookie("username", parseJwt(res.data.accessToken).username, {
+          path: "/",
+          secure: true,
+          maxAge: 24 * 60 * 60,
+        });
+        setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
+        console.log("로그인 데이터 ", data);
+        router.push("/");
+        toast("로그인되었습니다!");
+        axios
+          .get(`${process.env.NEXT_PUBLIC_API_URL}/api/emitter/subscribe`, {
+            headers: {
+              Authorization: `Bearer ${res.data.accessToken}`,
+              "Content-Type": "text/event-stream",
+              Connection: "keep-alive",
+              // "Cache-Control": "no-cache",
+            },
           })
-          setCookie("ticket-atk", res.data.accessToken, {
-            path: "/",
-            secure: "/",
-          });
-          setCookie("ticket-rtk", res.data.refreshToken, {
-            path: "/",
-            secure: "/",
-          });
-          setUserInfo("isRegistrationTrue" ? "ROLE_REGISTRANT" : "ROLE_USER");
-          router.push("/");
-          axios
-            .get(`${process.env.NEXT_PUBLIC_API_URL}/api/emitter/subscribe`, {
-              headers: {
-                "Authorization": `Bearer ${res.data.accessToken}`,
-                "Content-Type": "text/event-stream",
-                Connection: "keep-alive",
-                // "Cache-Control": "no-cache",
-              },
-            })
-            .then((res) => console.log("sse test: ", res));
-        })
-        .catch((err) => console.log('err', err));
-    }
-    if (tab === 2) {
-      setIsLogin(true);
-      setCookie("ticket-atk", { name: data.username, phone: data.phone }, {
-        path: "/",
-        secure: "/",
-        expires: oneHourFromNow
+          .then((res) => console.log("sse test: ", res));
+      })
+      .catch((err) => {
+        console.log("err", err);
+        if (err.response && err.response.status === 400) {
+          toast.error("비밀번호를 확인해주세요.");
+        } else {
+          toast.error("확인되지않는 ID입니다.");
+        }
       });
-      // setNonMember({ name: data.username, phone: data.phone });
-      router.push("/");
-    }
   };
 
   return (
-    <div>
-      {tab !== -1 &&
-        <form className="mt-40 w-full" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            {tab === 2 && <div className="text-[14px]">비회원은 재접속시 로그인 상태가 유지되지 않습니다</div>}
-            <div className="mb-10">
-              <div className="flex gap-6">
-                <label>{tab === 1 ? "아이디" : "이름"}</label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder={
-                    tab === 1
-                      ? "아이디를 입력해주세요"
-                      : "이름을 입력해주세요"
-                  }
-                  maxLength={10}
-                  {...register("username", {
-                    required: "이름은 필수 입력입니다.",
-                    minLength: {
-                      value: 2,
-                      message: "2자리 이상 입력해주세요.",
-                    },
-                  })}
-                />
-              </div>
-              {errors.username && (
-                <small role="alert">{errors.username.message}</small>
-              )}
+    <div className="flex items-center w-full xl:p-10">
+      <form
+        className="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div>
+          <div className="mb-10">
+            <div className="flex flex-col gap-6">
+              <input
+                type="text"
+                id="username"
+                placeholder="아이디를 입력해주세요"
+                maxLength={10}
+                className="w-full px-12 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
+                {...register("username", {
+                  required: "아이디는 필수 입력입니다.",
+                })}
+              />
             </div>
-
-            {tab === 1 &&
-              <div className="mb-10">
-                <div className="flex gap-6">
-                  <label>비밀번호</label>
-                  <input
-                    type="password"
-                    id="password"
-                    placeholder="비밀번호를 입력해주세요"
-                    minLength={6}
-                    {...register("password", {
-                      required: "비밀번호는 필수 입력입니다.",
-                      minLength: {
-                        value: 6,
-                        message: "6자리 이상 입력해주세요.",
-                      },
-                      pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d).+$/,
-                        message: "영어와 숫자를 포함해주세요",
-                      },
-                    })}
-                  />
-                </div>
-                {errors.password && (
-                  <small role="alert">{errors.password.message}</small>
-                )}
-              </div>
-            }
-
-            {tab === 2 && <div className="mb-10">
-              <div className="flex gap-6">
-                <label>전화번호</label>
-                <input
-                  type="text"
-                  id=""
-                  placeholder="- 을 제외한 11자리입력"
-                  maxLength={11}
-                  {...register("phone", {
-                    required: "- 을 제외한 11자리입력",
-                    minLength: {
-                      value: 11,
-                      message: "11자리 입력해주세요.",
-                    },
-                  })}
-                />
-              </div>
-              {errors.phone && (
-                <small role="alert">{errors.phone.message}</small>
-              )}
-            </div>}
-
-            <Button
-              className="bottom-0"
-              full
-              type="submit"
-            // disabled={!isSubmitting}
-            // disabled={true}
-            // onClick={() => {
-
-            // }}
-            >
-              로그인
-            </Button>
+            {errors.username && (
+              <small role="alert">{errors.username.message}</small>
+            )}
           </div>
-        </form>
-      }
+
+          <div className="mb-10">
+            <div className="flex flex-col gap-6">
+              <input
+                type="password"
+                id="password"
+                placeholder="비밀번호를 입력해주세요"
+                minLength={6}
+                className="w-full px-12 py-3 border rounded-lg h-42 border-slate-200 focus:outline-none focus:border-slate-500 hover:shadow"
+                {...register("password", {
+                  required: "비밀번호는 필수 입력입니다.",
+                })}
+              />
+            </div>
+            {errors.password && (
+              <small role="alert">{errors.password.message}</small>
+            )}
+          </div>
+
+          <Button className="bottom-0 mb-12 h-42" full type="submit">
+            로그인
+          </Button>
+          <Button
+            className="text-black bg-white border h-42"
+            type="button"
+            full
+          >
+            <Link href="/regist">회원가입</Link>
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

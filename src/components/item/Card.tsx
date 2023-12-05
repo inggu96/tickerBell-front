@@ -1,3 +1,4 @@
+import { LastPlace } from "@/util/addressUtils";
 import { day } from "@/util/day";
 import { price } from "@/util/price";
 import Image from "next/image";
@@ -11,8 +12,9 @@ type cardType = {
 };
 
 const Card = ({ data, type }: cardType) => {
+  // console.log("carddata", data);
 
-  // console.log('carddata', data);
+  const lastPartOfPlace = data.place ? LastPlace(data.place) : "";
 
   return (
     <>
@@ -20,15 +22,14 @@ const Card = ({ data, type }: cardType) => {
         <Link href={`/detail/${data.eventId}`}>
           {data.isAdult && <span className={s.adult_tag}>18</span>}
           <div className={s.img_wrap}>
-            {
-              !!data.thumbNailUrl &&
+            {!!data.thumbNailUrl && (
               <Image
                 src={data.thumbNailUrl}
                 alt={data.name}
                 layout="fill"
                 objectFit="cover"
               />
-            }
+            )}
           </div>
           <div className="mt-10">{data.name}</div>
           {data.castings && (
@@ -38,10 +39,12 @@ const Card = ({ data, type }: cardType) => {
               ))}
             </div>
           )}
-          <div>{data.place}</div>
+          <div>{lastPartOfPlace}</div>
           <div className="mt-6 mb-6">{day(data.startEvent)}</div>
           {data.discountNormalPrice && (
-            <del className="size-[14px]">{price(data.discountNormalPrice)}원</del>
+            <del className="size-[14px]">
+              {price(data.discountNormalPrice)}원
+            </del>
           )}
           <div>{price(data.normalPrice)}원</div>
         </Link>

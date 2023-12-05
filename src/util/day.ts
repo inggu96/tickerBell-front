@@ -20,6 +20,18 @@ export const today = () => {
   return todayDate;
 };
 
+export const date = (date: any) => {
+  return dayjs(date).format("YY-MM-DD");
+};
+
+export const calenderDateType = (date: any) => {
+  return dayjs(date).format("YYYY/MM/DD");
+};
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("ko-KR");
+};
+
 export const dayCompare = (dateA: any, dateB: any) => {
   const date1 = dayjs(dateA, "YY-MM-DD HH:mm");
   const date2 = dayjs(dateB, "YY-MM-DD HH:mm");

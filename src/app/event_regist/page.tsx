@@ -11,12 +11,11 @@ const Index = () => {
   return (
     <div>
       <Header />
-      <NavTab />
-      <div className="flex mt-96 h-screen w-full max-w-1000 m-auto flex-row justify-center items-center">
+      <div className="flex flex-row items-center justify-center w-full mx-auto mt-20 max-w-1000 mb-60">
         {/* <EventForm registType="event" /> */}
-        <FormProvider {...methods}>
-          <Event />
-        </FormProvider>
+        {/* <FormProvider {...methods}> */}
+        <Event />
+        {/* </FormProvider> */}
       </div>
     </div>
   );

@@ -2,18 +2,24 @@
 
 import { postEventApi } from "@/api/events";
 import { day, weekDay } from "@/util/day";
+import { useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { KeyboardEvent, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
-import FRInput from "./FRInput";
-
-import FRRadio from "./FRRadio";
 import { ImageUpload } from "./ImageUpload";
+import { CheckBox, Input, Radio } from "./Input";
 import { InputField } from "./InputField";
 import { OnDatePicker } from "./OnDatePicker";
+import DatePicker from "react-datepicker";
+import { getCookie } from "@/util/authCookie";
 
 const Event = () => {
   const {
@@ -30,13 +36,13 @@ const Event = () => {
     },
   });
 
-  const [atk, setAtk] = useState("");
   const [mapOnModal, setMapOnModal] = useState(false);
   const [thumbNailUrl, setThumbNailUrl] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [enroll_company, setEnroll_company] = useState({
     address: "",
   });
+  const today = new Date();
 
   const {
     fields: tagsFields,
@@ -96,41 +102,50 @@ const Event = () => {
     }
   };
 
-  const onSubmit = async (onData: FormData): Promise<void> => {
-    const tagNames = onData.tags.map((tag) => tag.name);
-    const castingNames = onData.castings.map((casting) => casting.name);
-    const hostNames = onData.hosts.map((host) => host.name);
-    const updatedImageUrls = [thumbNailUrl, ...imageUrls];
+  const createEventMutation = useMutation({
+    mutationFn: (payload: any) => {
+      const accessToken = getCookie("ticket-atk");
+      return postEventApi(accessToken, payload);
+    },
+    onSuccess: (payload: any) => {
+      console.log("dd", payload);
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormData> = async (onData: any) => {
+    const tagNames = onData?.tags?.map((tag: any) => tag.name);
+    const castingNames = onData?.castings?.map((casting: any) => casting.name);
+    const hostNames = onData?.hosts?.map((host: any) => host.name);
 
     const payload = {
       name: onData.name,
-      startEvent: day(onData.startEvent),
-      endEvent: day(onData.endEvent),
-      availablePurchaseTime: day(onData.availablePurchaseTime),
+      startEvent: dayjs(onData.startEvent).format("YYYY-MM-DDT00:00:00") + "Z",
+      endEvent: dayjs(onData.endEvent).format("YYYY-MM-DDT00:00:00") + "Z",
+      dailyStartEvent: `${dayjs(onData.dailyStartEvent).format("HH:mm")}`,
+      eventTime: Number(onData.eventTime),
+      availablePurchaseTime: `${dayjs(onData.availablePurchaseTime).format(
+        "YYYY-MM-DDTHH:mm:ss"
+      )}Z`,
       tags: tagNames,
       castings: castingNames,
       hosts: hostNames,
       place: onData.place,
       category: onData.category,
-      isAdult: onData.isAdult,
-      normalPrice: onData.normalPrice,
-      premiumPrice: onData.premiumPrice,
-      saleDegree: onData.saleDegree,
-      isSpecialA: onData.isSpecialA,
-      isSpecialB: onData.isSpecialB,
-      isSpecialC: onData.isSpecialC,
-      imageUrls: updatedImageUrls,
+      isAdult: onData.isAdult === "adult" ? true : false,
+      normalPrice: Number(onData.normalPrice),
+      premiumPrice: Number(onData.premiumPrice),
+      saleDegree: Number(onData.saleDegree),
+      description: onData.description,
+      isSpecialA: onData.isSpecialA === undefined ? false : true,
+      isSpecialB: onData.isSpecialB === undefined ? false : true,
+      isSpecialC: onData.isSpecialC === undefined ? false : true,
+      thumbNailUrl: thumbNailUrl,
+      imageUrls: imageUrls,
     };
     console.log("dd", payload);
-
-    try {
-      const response = await postEventApi(atk, payload);
-      console.log(response);
-    } catch (error) {
-      console.error("이벤트 등록 실패:", error);
-    }
+    createEventMutation.mutate(payload);
   };
-
+  console.log("watch", watch());
   // 컴포넌트 반환
   return (
     <>
@@ -182,57 +197,156 @@ const Event = () => {
               )}
             </div>
             {/* 시작일 선택 */}
-            <div className="flex flex-row gap-12">
-              <div>
-                <label
-                  htmlFor="startEvent"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
-                >
-                  시작일
-                </label>
+            <div className="flex flex-row gap-12 mb-10">
+              <div className="flex flex-col">
                 <div>
-                  <OnDatePicker
+                  <div className="block mb-2 text-sm font-medium text-gray-900 ">
+                    시작일
+                  </div>
+                  <Controller
                     control={control}
                     name="startEvent"
-                    minDate={weekDay(0).toDate()}
-                    maxDate={weekDay(6).toDate()}
-                    rules={{ required: true }}
+                    rules={{ required: "시작일은 필수입니다." }}
+                    render={({ field }) => (
+                      <DatePicker
+                        className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                        dateFormat="yy년 MM월 dd일"
+                        selected={
+                          field.value ? dayjs(field.value).toDate() : null
+                        }
+                        onChange={(date) =>
+                          field.onChange(dayjs(date).toDate())
+                        }
+                        minDate={
+                          watch("startEvent")
+                            ? watch("startEvent")
+                            : weekDay(2).toDate()
+                        }
+                      />
+                    )}
                   />
                 </div>
+                {errors.startEvent && (
+                  <small role="alert">{errors.startEvent.message}</small>
+                )}
               </div>
-              {/* 종료일 선택 */}
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                  종료일
-                </label>
+              <div className="flex flex-col">
                 <div>
-                  <OnDatePicker
+                  <div className="block mb-2 text-sm font-medium text-gray-900 ">
+                    종료일
+                  </div>
+                  <Controller
                     control={control}
                     name="endEvent"
-                    minDate={
-                      watch("startEvent")
-                        ? dayjs(watch("startEvent")).toDate()
-                        : undefined
-                    }
-                    maxDate={
-                      watch("startEvent") ? weekDay(2).toDate() : undefined
-                    }
-                    rules={{ required: true }}
+                    rules={{ required: "종료일은 필수입니다." }}
+                    render={({ field }) => (
+                      <DatePicker
+                        className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                        dateFormat="yy년 MM월 dd일"
+                        selected={
+                          field.value ? dayjs(field.value).toDate() : null
+                        }
+                        onChange={(date) =>
+                          field.onChange(dayjs(date).toDate())
+                        }
+                        minDate={
+                          watch("startEvent")
+                            ? watch("startEvent")
+                            : weekDay(2).toDate()
+                        }
+                      />
+                    )}
                   />
                 </div>
+                {errors.endEvent && (
+                  <small role="alert">{errors.endEvent.message}</small>
+                )}
               </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  구매 가능 시간
-                </label>
-                <OnDatePicker
-                  control={control}
-                  name="availablePurchaseTime"
-                  minDate={
-                    watch("startEvent") ? weekDay(-2).toDate() : undefined
-                  }
-                  maxDate={new Date()}
-                />
+              <div className="flex flex-col">
+                <div>
+                  <div className="block mb-2 text-sm font-medium text-gray-900">
+                    시작 시간
+                  </div>
+                  <Controller
+                    control={control}
+                    name="dailyStartEvent"
+                    rules={{ required: "이벤트 시작 시간은 필수입니다." }}
+                    render={({ field }) => (
+                      <DatePicker
+                        className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                        dateFormat="HH시 mm분"
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeIntervals={15}
+                        timeCaption="시작 시간"
+                        selected={
+                          field.value ? dayjs(field.value).toDate() : null
+                        }
+                        onChange={(date) =>
+                          field.onChange(dayjs(date).toDate())
+                        }
+                        minDate={weekDay(0).toDate()}
+                      />
+                    )}
+                  />
+                </div>
+                {errors.dailyStartEvent && (
+                  <small role="alert">{errors.dailyStartEvent.message}</small>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-row gap-12 mb-10">
+              <div className="flex flex-col">
+                <div>
+                  <div className="block mb-2 text-sm font-medium text-gray-900">
+                    구매 가능 시간
+                  </div>
+                  <Controller
+                    control={control}
+                    name="availablePurchaseTime"
+                    rules={{ required: "구매 가능 시간은 필수입니다." }}
+                    render={({ field }) => (
+                      <DatePicker
+                        className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                        dateFormat="yy년 MM월 dd일 HH시 mm분"
+                        selected={
+                          field.value ? dayjs(field.value).toDate() : null
+                        }
+                        onChange={(date) =>
+                          field.onChange(dayjs(date).toDate())
+                        }
+                        showTimeSelect
+                        timeIntervals={15}
+                        minDate={weekDay(0).toDate()}
+                      />
+                    )}
+                  />
+                </div>
+                {errors.availablePurchaseTime && (
+                  <small role="alert">
+                    {errors.availablePurchaseTime.message}
+                  </small>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <div>
+                  <div className="block mb-2 text-sm font-medium text-gray-900">
+                    상영 시간
+                  </div>
+                  <input
+                    type="number"
+                    id="eventTime"
+                    placeholder="단위 - 분"
+                    maxLength={1440}
+                    className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                    {...register("eventTime", {
+                      required: "상영시간은 필수 입력입니다.",
+                    })}
+                  />
+                </div>
+                {errors.eventTime && (
+                  <small role="alert">{errors.eventTime.message}</small>
+                )}
               </div>
             </div>
             {/* 이벤트 캐스팅 */}
@@ -276,7 +390,7 @@ const Event = () => {
                 <div className="mb-10">
                   <Button
                     type="button"
-                    onClick={(e) => {
+                    onClick={(e: any) => {
                       e.stopPropagation();
                       setMapOnModal(true);
                     }}
@@ -289,34 +403,27 @@ const Event = () => {
                   type="text"
                   id="place"
                   maxLength={5}
-                  {...register("place", { required: true })}
+                  {...register("place", {
+                    required: "이벤트 주소는 필수 입력입니다.",
+                  })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMapOnModal(true);
+                  }}
                   value={enroll_company.address}
                   readOnly
                 />
               </div>
+              {errors.place && (
+                <small role="alert">{errors.place.message}</small>
+              )}
             </div>
-            <div className="flex flex-row ">
-              <label>성인여부</label>
-              <div className="flex flex-row gap-12">
-                <label>
-                  <FRRadio {...register("isAdult")} value="true" id="adult" />
-                  성인
-                </label>
-                <label>
-                  <FRRadio
-                    {...register("isAdult")}
-                    value="false"
-                    id="non-adult"
-                  />
-                  미성년
-                </label>
-              </div>
-            </div>
+
             <div className="flex flex-col">
               <span>카테고리</span>
               <div className="flex flex-row gap-12">
                 {["MUSICAL", "CONCERT", "PLAY", "CLASSIC", "SPORTS"].map(
-                  (category) => {
+                  (category, key) => {
                     const selectedCategory = watch("category");
                     const borderClass =
                       selectedCategory === category
@@ -324,97 +431,141 @@ const Event = () => {
                         : "border-gray-200";
 
                     return (
-                      <label key={category}>
-                        <FRRadio
-                          {...register("category", { required: true })}
+                      <>
+                        <Radio
+                          key={key}
                           label={category}
                           id={category}
                           type="radio"
                           value={category}
                           className={borderClass}
+                          {...register("category", {
+                            required: "카테고리를 선택해주세요",
+                          })}
                         />
-                      </label>
+                      </>
                     );
                   }
                 )}
               </div>
+              {errors.category && (
+                <small role="alert">{errors.category.message}</small>
+              )}
             </div>
-            <div className="flex flex-row">
-              <label className="mr-4">성인여부</label>
-              <div className="flex flex-row gap-12">
-                {[true, false].map((value) => {
-                  const selectedAdult = watch("isAdult");
-                  const borderClass =
-                    selectedAdult == value
-                      ? "border-blue-500"
-                      : "border-gray-200";
-
-                  return (
-                    <label key={String(value)}>
-                      <FRRadio
-                        {...register("isAdult")}
-                        type="radio"
-                        value={value}
-                        id={value ? "adult" : "non-adult"}
-                        label={value ? "성인" : "미성년"}
-                        className={borderClass}
-                      />
-                    </label>
-                  );
-                })}
+            <div className="flex flex-col mb-10">
+              <div className="flex flex-row">
+                <div className="mr-10">성인여부</div>
+                <div className="flex flex-row gap-12">
+                  {["adult", "none-adult"].map((value, key) => (
+                    <Radio
+                      key={key}
+                      label={value === "adult" ? "성인" : "미성년"}
+                      id={"isAdult"}
+                      value={value}
+                      {...register("isAdult", {
+                        required: "성인여부를 체크해주세요",
+                      })}
+                    />
+                  ))}
+                </div>
               </div>
+              {errors.isAdult && (
+                <small role="alert">{errors.isAdult.message}</small>
+              )}
             </div>
-            <div className="flex flex-row gap-12">
-              <FRInput
-                {...register("normalPrice", { required: true })}
-                className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                label="일반 가격"
-                id="normalPrice"
-                type="text"
-              />
-              <FRInput
-                {...register("premiumPrice", { required: true })}
-                className="w-full p-16 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+            <div className="flex flex-row gap-12 ">
+              <div>
+                <Input
+                  className=""
+                  label="일반 가격"
+                  id="normalPrice"
+                  type="number"
+                  {...register("normalPrice", {
+                    required: "가격은 필수입력입니다.",
+                  })}
+                />
+                {errors.normalPrice && (
+                  <small role="alert">{errors.normalPrice.message}</small>
+                )}
+              </div>
+              <Input
+                {...register("premiumPrice")}
                 label="프리미엄 가격"
                 id="premiumPrice"
+                type="number"
               />
-              <FRInput
-                {...register("saleDegree", { required: true })}
+              <Input
+                {...register("saleDegree")}
                 label="할인 금액"
                 id="saleDegree"
+                type="number"
               />
+            </div>
+            <div className="relative my-10 h-60">
+              <div className="absolute">
+                {watch().premiumPrice > 0 && (
+                  <>
+                    <small> 선택한 좌석이 프리미엄 가격으로 지정됩니다. </small>
+                    <div className="flex flex-row item-center">
+                      <CheckBox
+                        {...register("isSpecialA")}
+                        label="특별 옵션 A"
+                        id="isSpecialA"
+                        type="checkbox"
+                      />
+                      <CheckBox
+                        {...register("isSpecialB")}
+                        label="특별 옵션 B"
+                        id="isSpecialB"
+                        type="checkbox"
+                      />
+                      <CheckBox
+                        {...register("isSpecialC")}
+                        label="특별 옵션 C"
+                        id="isSpecialC"
+                        type="checkbox"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-row item-center">
-              <FRInput
-                {...register("isSpecialA")}
-                label="특별 옵션 A"
-                id="isSpecialA"
-                type="checkbox"
-              />
-              <FRInput
-                {...register("isSpecialB")}
-                label="특별 옵션 B"
-                id="isSpecialB"
-                type="checkbox"
-              />
-              <label className="flex items-center justify-between px-4 py-2 text-sm border-2 border-gray-200 rounded-lg cursor-pointer group hover:bg-gray-50">
-                <FRInput
-                  {...register("isSpecialC")}
-                  label="특별 옵션 C"
-                  id="isSpecialC"
-                  type="checkbox"
-                />
-              </label>
-            </div>
             <ImageUpload
               setThumbNailUrl={setThumbNailUrl}
               setImageUrls={setImageUrls}
             />
-
+            <div>
+              <textarea
+                className="w-full p-6 mt-20 border resize-none"
+                placeholder="상세 내용 입력"
+                id="description"
+                {...register("description")}
+              />
+            </div>
+            {/* <div>
+              <Controller
+                name="thumbnailUrl"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Dropzone
+                    onDrop={(files) => {
+                      onChange(files[0]);
+                    }}
+                    onDelete={(file) => {
+                      onChange(null);
+                      // console.log("onDelete", file);
+                    }}
+                    maxFiles={1}
+                    files={value ? [fileWithPreview(value)] : []}
+                  />
+                )}
+              />
+            </div> */}
             <Button
               className="mt-20 bg-blue-700 hover:bg-blue-800"
               type="submit"
+              onClick={onSubmit}
             >
               이벤트 생성
             </Button>
@@ -426,6 +577,3 @@ const Event = () => {
 };
 
 export default Event;
-
-// "group hover:bg-gray-50 flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer text-sm border-blue-500"
-//                               : "group hover:bg-gray-50 flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer text-sm border-gray-200";

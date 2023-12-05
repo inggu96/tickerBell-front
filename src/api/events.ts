@@ -7,7 +7,11 @@ type allEventType = {
 };
 
 // 이벤트 리스트
-export async function getEventAllApi({ category, pageParam = 0, offset = 18 }: allEventType) {
+export async function getEventAllApi({
+  category,
+  pageParam = 0,
+  offset = 18,
+}: allEventType) {
   if (category !== "") {
     try {
       const res = await apiInstance.get(`/api/events/${category}`, {
