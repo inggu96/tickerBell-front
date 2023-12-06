@@ -91,10 +91,10 @@ export async function postEventImageApi(formDataValues: ImageFormSubmitValue) {
 }
 
 // 이벤트 id 정보
-export async function getEventIdApi(id: any): Promise<any> {
+export async function getEventIdApi(id: any) {
   try {
-    const res = await apiInstance.get(`/api/events/${id}`);
-    return res.data; // 데이터를 반환하도록 수정
+    const res = await apiInstance.get(`/api/event/${id}`);
+    return res;
   } catch (error) {
     console.error(error);
     throw error;

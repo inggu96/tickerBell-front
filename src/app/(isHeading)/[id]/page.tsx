@@ -3,9 +3,20 @@
 import { getEventCategoryApi, getEventIdApi } from "@/api/events";
 import Card from "@/components/item/Card";
 import { useQuery } from "@tanstack/react-query";
+import { useParams, useServerInsertedHTML } from "next/navigation";
 import React from "react";
 
-const Category = ({ params }: { params: { id: string } }) => {
+export function generateStaticParams() {
+  return [
+    { id: "musical" },
+    { id: "concert" },
+    { id: "play" },
+    { id: "classic" },
+    { id: "sports" },
+  ];
+}
+
+const Index = ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
   const { data, isSuccess, isError, error } = useQuery({
@@ -25,9 +36,4 @@ const Category = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export async function generateStaticParams() {
-  const categories: any[] = await getEventIdApi("id"); // Fetch the categories
-  return categories.map((category: any) => ({ id: category.id.toString() })); // Return an array of params
-}
-
-export default Category;
+export default Index;
