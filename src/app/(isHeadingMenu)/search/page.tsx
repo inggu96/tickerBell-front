@@ -1,9 +1,8 @@
 "use client";
 
-import { useParams, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
 import Card from "@/components/item/Card";
+import { gql, useQuery } from "@apollo/client";
+import { useSearchParams } from "next/navigation";
 
 const Index = () => {
   const searchParams = useSearchParams();

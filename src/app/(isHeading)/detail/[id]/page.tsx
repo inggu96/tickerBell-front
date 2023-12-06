@@ -2,17 +2,16 @@
 
 import { getEventIdApi } from "@/api/events";
 import Button from "@/components/button/Button";
-import Header from "@/components/header/Header";
 import EventDetailModal from "@/components/portalModal/eventDetailModal/EventDetailModal";
 import { seatPrice } from "@/hooks/useSeat";
-import { day, formatDate } from "@/util/day";
+import { formatDate } from "@/util/day";
 import { useQuery } from "@tanstack/react-query";
+import ko from "date-fns/locale/ko";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ko from "date-fns/locale/ko";
 import styles from "./DatePicker.module.scss";
 
 const Index = () => {
@@ -86,7 +85,6 @@ const Index = () => {
             eventId={Array.isArray(params.id) ? params.id[0] : params.id}
           />
         )}
-        <Header />
         <div className="flex flex-col justify-center mx-auto mt-40 rounded-lg shadow lg:flex-row max-w-1280">
           <div className="w-full">
             <div className="flex flex-col w-full gap-40 h-1/2 lg:flex-row md:w-8/12">
