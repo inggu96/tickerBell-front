@@ -3,18 +3,14 @@
 import { getEventCategoryApi, getEventIdApi } from "@/api/events";
 import Card from "@/components/item/Card";
 import { useQuery } from "@tanstack/react-query";
-// import { useParams } from 'next/navigation'
-import { useRouter } from "next/router";
 import React from "react";
 
-const Category = () => {
-  // const { id } = useParams();
-  const router = useRouter();
-  const { id } = router.query;
+const Category = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
 
   const { data, isSuccess, isError, error } = useQuery({
     queryKey: ["event-category", id],
-    queryFn: () => getEventCategoryApi(1, id?.toString().toUpperCase(), ""),
+    queryFn: () => getEventCategoryApi(1, id.toString().toUpperCase(), ""),
   });
 
   console.log("카테고리 : ", data?.data.eventListResponses);
@@ -28,5 +24,10 @@ const Category = () => {
     </div>
   );
 };
+
+export async function generateStaticParams() {
+  const categories: any[] = await getEventIdApi("id"); // Fetch the categories
+  return categories.map((category: any) => ({ id: category.id.toString() })); // Return an array of params
+}
 
 export default Category;
