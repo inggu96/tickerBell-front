@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { getEventCategoryApi, getEventIdApi } from "@/api/events";
 import Card from "@/components/item/Card";
@@ -7,33 +7,34 @@ import { useParams, useServerInsertedHTML } from "next/navigation";
 import React from "react";
 
 export function generateStaticParams() {
-  return [
-    { id: "musical" },
-    { id: "concert" },
-    { id: "play" },
-    { id: "classic" },
-    { id: "sports" },
-  ];
+  const categorys = ["musical", "concert", "play", "classic", "sports"];
+  return categorys.map((category) => ({
+    slug: category,
+  }));
 }
 
-const Index = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+// export function generateStaticParams() {
+//   return [{ slug: ["a", "1"] }, { slug: ["b", "2"] }, { slug: ["c", "3"] }];
+// }
 
-  const { data, isSuccess, isError, error } = useQuery({
-    queryKey: ["event-category", id],
-    queryFn: () => getEventCategoryApi(1, id.toString().toUpperCase(), ""),
-  });
+const Index = ({ params }: { params: { slug: string } }) => {
+  const { slug } = params;
 
-  console.log("카테고리 : ", data?.data.eventListResponses);
+  // const { data, isSuccess, isError, error } = useQuery({
+  //   queryKey: ["event-category", slug],
+  //   queryFn: () => getEventCategoryApi(1, slug.toString().toUpperCase(), ""),
+  // });
+
+  // console.log("카테고리 : ", data?.data.eventListResponses);
 
   return (
     <div className="grid grid-cols-6 gap-36 place-items-center mt-60">
-      {isSuccess &&
+      {/* {isSuccess &&
         data?.data.eventListResponses.map((item: any, index: any) => (
           <Card key={index} data={item} />
-        ))}
+        ))} */}
+      디테일{slug}
     </div>
   );
 };
-
 export default Index;
