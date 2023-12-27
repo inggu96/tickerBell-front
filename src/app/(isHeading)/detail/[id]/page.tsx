@@ -13,9 +13,18 @@ import React, { useEffect, useState } from "react";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./DatePicker.module.scss";
+export async function generateStaticParams({ params }: any) {
+  const events = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/event/${params.id}`
+  ).then((res) => res.json());
 
-const Index = () => {
-  const params = useParams();
+  return events.map((event: any) => ({
+    slug: event.slug,
+  }));
+}
+
+const Index = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [numberOfPeople, setNumberOfPeople] = useState<number>(1);
@@ -25,7 +34,6 @@ const Index = () => {
   const handlePeopleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNumberOfPeople(Number(e.target.value));
   };
-
   const {
     data: eventIdData,
     isSuccess,
@@ -36,8 +44,7 @@ const Index = () => {
     queryFn: () => getEventIdApi(params.id),
   });
   const data = eventIdData?.data;
-
-  console.log("data", data);
+  const defaultDate = eventIdData ? new Date(data.startEvent) : new Date();
 
   useEffect(() => {
     console.log("selectedSeats", selectedSeats);

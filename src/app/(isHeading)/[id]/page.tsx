@@ -13,9 +13,7 @@ import {
 import React from "react";
 
 export async function generateStaticParams() {
-  // usePathname 훅을 사용할 수 없으므로, 라우트 경로를 직접 입력합니다.
   const id = "app/(isHeading)/[id]/page.tsx";
-  // fetch 함수를 await 키워드로 기다립니다.
   const res = await apiInstance.get(`/api/event/${id}`);
   const data = res.data;
   const slugs = data.map((item: any) => item.slug);
