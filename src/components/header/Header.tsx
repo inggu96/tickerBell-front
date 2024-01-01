@@ -8,7 +8,7 @@ import MobileMenu from "./MobileMenu";
 
 const Header = () => {
   return (
-    <header className="box-border flex items-center w-full m-auto border-b border-red-500 h-60">
+    <header className="box-border flex items-center w-full m-auto border-b border-red-500 sm:h-0 md:h-60 lg:h-60 xl:h-60">
       <div className="items-center justify-between hidden w-full px-20 m-auto max-w-1280 md:flex lg:flex xl:flex 2xl:flex">
         <div className="flex items-center gap-80">
           <a href="/">

@@ -106,6 +106,7 @@ export const ImageUpload = ({ setThumbNailUrl, setImageUrls }: Image) => {
       setThumbNailUrl(response.data.thumbNailImageUrl);
       setImageUrls(response.data.imageUrls);
       setUploading(false);
+      console.log("이미지 등록완료");
     } catch (error) {
       console.error("이미지 업로드 중 에러 발생:", error);
     }

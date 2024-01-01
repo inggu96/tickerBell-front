@@ -59,7 +59,7 @@ export const List = ({ category, type, className }: ListType) => {
           </div>
         )}
         {status === "success" && (
-          <div className="grid grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-x-16 gap-y-36 place-items-center mt-60">
+          <div className="p-12 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-16 gap-y-36 place-items-center mt-60">
             <h4 className="mb-5 text-3xl font-bold text-center">
               전체 이벤트{" "}
             </h4>

@@ -5,6 +5,7 @@ import { getCookie } from "@/util/authCookie";
 import { weekDay } from "@/util/day";
 import { useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,6 +15,7 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
+import { toast } from "react-toastify";
 import Button from "../button/Button";
 import SearchMapModal from "../portalModal/mapModal/SearchMapModal";
 import { ImageUpload } from "./ImageUpload";
@@ -41,6 +43,7 @@ const Event = () => {
   const [enroll_company, setEnroll_company] = useState({
     address: "",
   });
+  const router = useRouter();
   const today = new Date();
 
   const {
@@ -106,8 +109,9 @@ const Event = () => {
       const accessToken = getCookie("ticket-atk");
       return postEventApi(accessToken, payload);
     },
-    onSuccess: (payload: any) => {
-      console.log("dd", payload);
+    onSuccess: () => {
+      toast("이벤트 등록완료");
+      router.push("/");
     },
   });
 
